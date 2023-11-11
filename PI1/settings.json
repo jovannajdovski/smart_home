@@ -1,0 +1,12 @@
+{
+    "RDHT1": {
+        "id": "RDHT1",
+        "simulated": true,
+        "pin": 17
+    },
+    "RDHT2": {
+        "id": "RDHT2",
+        "simulated": true,
+        "pin": 27
+    }  
+}
