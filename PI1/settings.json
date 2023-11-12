@@ -14,5 +14,20 @@
         "simulated": true,
         "trig_pin": 23,
         "echo_pin": 24
+    },
+    "DPIR1": {
+        "id": "DPIR1",
+        "simulated": true,
+        "pin": 4
+    },
+    "RPIR1": {
+        "id": "RPIR1",
+        "simulated": true,
+        "pin": 5
+    },
+    "RPIR2": {
+        "id": "RPIR2",
+        "simulated": true,
+        "pin": 6
     }  
 }
