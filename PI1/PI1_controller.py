@@ -3,6 +3,7 @@ import threading
 from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
+from components.pir import run_pir
 import time
 
 try:
@@ -21,9 +22,15 @@ if __name__ == "__main__":
         rdht1_settings = settings['RDHT1']
         rdht2_settings = settings['RDHT2']
         dus1_settings = settings['DUS1']
+        dpir1_settings = settings['DPIR1']
+        rpir1_settings = settings['RPIR1']
+        rpir2_settings = settings['RPIR2']
         run_dht(rdht1_settings, threads, stop_event)
         run_dht(rdht2_settings, threads, stop_event)
         run_uds(dus1_settings, threads, stop_event)
+        run_pir(dpir1_settings, threads, stop_event)
+        run_pir(rpir1_settings, threads, stop_event)
+        run_pir(rpir2_settings, threads, stop_event)
         while True:
             time.sleep(1)
 
