@@ -17,11 +17,11 @@ def dht_callback(humidity, temperature, code, id):
 
 def run_dht(settings, threads, stop_event):
         if settings['simulated']:
-            print(f"\nStarting {settings['id']} sumilator\n")
+            print(f"\nStarting {settings['id']} simulator\n")
             dht_thread = threading.Thread(target = run_dht_simulator, args=(settings['id'], 2, dht_callback, stop_event))
             dht_thread.start()
             threads.append(dht_thread)
-            print(f"\n{settings['id']} sumilator started\n")
+            print(f"\n{settings['id']} simulator started\n")
         else:
             from sensors.dht import run_dht_loop, DHT
             print(f"\nStarting {settings['id']} loop\n")

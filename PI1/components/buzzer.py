@@ -14,11 +14,11 @@ def buzzer_callback(code, id):
 
 def run_buzzer(settings, threads, stop_event):
         if settings['simulated']:
-            print(f"\nStarting {settings['id']} sumilator\n")
+            print(f"\nStarting {settings['id']} simulator\n")
             buzzer_thread = threading.Thread(target = run_buzzer_simulator, args=(settings['id'], 0.1, buzzer_callback, stop_event))
             buzzer_thread.start()
             threads.append(buzzer_thread)
-            print(f"\n{settings['id']} sumilator started\n")
+            print(f"\n{settings['id']} simulator started\n")
         else:
             from actuators.buzzer import run_buzzer_loop, Buzzer
             print(f"\nStarting {settings['id']} loop\n")

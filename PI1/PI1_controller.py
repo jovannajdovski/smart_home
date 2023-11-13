@@ -40,9 +40,9 @@ if __name__ == "__main__":
         run_pir(rpir1_settings, threads, stop_event)
         run_pir(rpir2_settings, threads, stop_event)
         run_buzzer(db_settings, threads, stop_event)
-        run_button(db_settings, threads, stop_event)
-        run_rgb_diode(db_settings, threads, stop_event)
-        run_membrane_switch(db_settings, threads, stop_event)
+        run_button(ds1_settings, threads, stop_event)
+        run_rgb_diode(dl_settings, threads, stop_event)
+        run_membrane_switch(dms_settings, threads, stop_event)
        
         while True:
             time.sleep(1)

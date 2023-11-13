@@ -22,11 +22,11 @@ def pir_callback(motion_detected, id):
 
 def run_pir(settings, threads, stop_event):
         if settings['simulated']:
-            print(f"\nStarting {settings['id']} sumilator\n")
+            print(f"\nStarting {settings['id']} simulator\n")
             pir_thread = threading.Thread(target = run_pir_simulator, args=(settings['id'], 0.1, pir_callback, stop_event))
             pir_thread.start()
             threads.append(pir_thread)
-            print(f"\n{settings['id']} sumilator started\n")
+            print(f"\n{settings['id']} simulator started\n")
         else:
             from sensors.pir import run_pir_loop, PIR
             print(f"\nStarting {settings['id']} loop\n")
