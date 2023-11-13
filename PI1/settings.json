@@ -35,5 +35,30 @@
         "simulated": true,
         "pin": 25,
         "pitch": 440
-    }    
+    },
+    "DS1":{
+        "id": "DS1",
+        "simulated": true,
+        "pin": 22
+    },
+    "DL":{
+        "id": "DL",
+        "simulated": true,
+        "red_pin": 12,
+        "green_pin": 13,
+        "blue_pin": 19 
+    },
+    "DMS":{
+        "id":"DMS",
+        "simulated": true,
+        "r1_pin": 10,
+        "r2_pin": 9,
+        "r3_pin": 11,
+        "r4_pin": 8,
+        "c1_pin": 7,
+        "c2_pin": 16,
+        "c3_pin": 20,
+        "c4_pin": 21
+    }
+
 }
