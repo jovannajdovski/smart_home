@@ -29,5 +29,11 @@
         "id": "RPIR2",
         "simulated": true,
         "pin": 6
-    }  
+    },
+    "DB": {
+        "id": "DB",
+        "simulated": true,
+        "pin": 25,
+        "pitch": 440
+    }    
 }
