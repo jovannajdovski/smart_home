@@ -4,6 +4,7 @@ from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
 from components.pir import run_pir
+from components.buzzer import run_buzzer
 import time
 
 try:
@@ -25,12 +26,14 @@ if __name__ == "__main__":
         dpir1_settings = settings['DPIR1']
         rpir1_settings = settings['RPIR1']
         rpir2_settings = settings['RPIR2']
+        db_settings = settings['DB']
         run_dht(rdht1_settings, threads, stop_event)
         run_dht(rdht2_settings, threads, stop_event)
         run_uds(dus1_settings, threads, stop_event)
         run_pir(dpir1_settings, threads, stop_event)
         run_pir(rpir1_settings, threads, stop_event)
         run_pir(rpir2_settings, threads, stop_event)
+        run_buzzer(db_settings, threads, stop_event)
         while True:
             time.sleep(1)
 
