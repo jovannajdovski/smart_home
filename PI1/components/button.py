@@ -15,7 +15,7 @@ def button_callback(id):
 def run_button(settings, threads, stop_event):
     if settings['simulated']:
         print(f"\nStarting {settings['id']} simulator\n")
-        button_thread = threading.Thread(target = run_button_simulator, args=(settings['id'], 0.2, button_callback, stop_event))
+        button_thread = threading.Thread(target = run_button_simulator, args=(settings['id'], 1, button_callback, stop_event))
         button_thread.start()
         threads.append(button_thread)
         print(f"\n{settings['id']} simulator started\n")
@@ -24,7 +24,7 @@ def run_button(settings, threads, stop_event):
         print(f"\nStarting {settings['id']} loop\n")
         button = Button(settings['id'], settings['pin'])
         button.setup_button()
-        button_thread = threading.Thread(target=run_button_loop, args=(button, 0.05, button_callback, stop_event))
+        button_thread = threading.Thread(target=run_button_loop, args=(button, 0.1, button_callback, stop_event))
         button_thread.start()
         threads.append(button_thread)
         print(f"\n{settings['id']} loop started\n")

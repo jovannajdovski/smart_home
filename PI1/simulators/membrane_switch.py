@@ -7,7 +7,7 @@ def generate_values(probability=0.2):
     while True:
         r=random.random()
         if r < probability:
-            yield keys[round(len(keys)*r/probability)]
+            yield keys[round(len(keys)*r/probability)-1]
         else:
             yield None
 

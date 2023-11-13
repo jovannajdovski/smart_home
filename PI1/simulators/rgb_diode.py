@@ -2,16 +2,23 @@ import time
 import random
 from pynput import keyboard
 
+GREEN = "\033[32m"
+RED = "\033[31m"
+WHITE = "\033[47;30m"
+BLUE = "\033[34m"
+RESET = "\033[0m"
+
+
 def on_press(key, callback, id):
     key = str(key).replace("'", "")
     if key == "r":
-        callback("red", id)
+        callback(RED + "red" + RESET, id)
     elif key == "b":
-        callback("blue", id) 
+        callback(BLUE + "blue" + RESET, id) 
     elif key == "g":
-        callback("green", id) 
+        callback(GREEN + "green" + RESET, id) 
     elif key == "w":
-        callback("white", id)
+        callback(WHITE + "white" + RESET, id)
     elif key == "o":
         callback("off", id)
 
