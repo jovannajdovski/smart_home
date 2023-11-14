@@ -2,11 +2,31 @@ import time
 import random
 from pynput import keyboard
 
+def beep():
+    try:
+        import winsound
+    except ImportError:
+        import os
+        def _beep():
+            os.system('beep')
+    else:
+        def _beep():
+            winsound.Beep(1000, 1000)
+
+    _beep()
+
+def alarm():
+    for _ in range(3):
+        beep()
+        time.sleep(1)
+
 def on_press(key, callback, id):
     key = str(key).replace("'", "")
     if key == "a":
+        alarm()
         callback("ALARM", id)
     elif key == "b":
+        beep()
         callback("BUZZ", id)
 
 def run_buzzer_simulator(id, delay, callback, stop_event):

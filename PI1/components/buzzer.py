@@ -23,6 +23,7 @@ def run_buzzer(settings, threads, stop_event):
             from actuators.buzzer import run_buzzer_loop, Buzzer
             print(f"\nStarting {settings['id']} loop\n")
             buzzer = Buzzer(settings['id'], settings['pin'], settings['pitch'])
+            buzzer.setup_buzzer()
             buzzer_thread = threading.Thread(target=run_buzzer_loop, args=(buzzer, 3, 0.5, buzzer_callback, stop_event))
             buzzer_thread.start()
             threads.append(buzzer_thread)

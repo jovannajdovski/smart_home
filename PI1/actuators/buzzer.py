@@ -33,7 +33,7 @@ def run_buzzer_loop(buzzer, delay, duration, callback, stop_event):
         # :TODO add some logic
         rnd = random.random()
         if rnd < 0.05:
-            buzzer.alarm(duration, 60*duration)
+            buzzer.alarm(duration, 10*duration)
             callback("ALARM", buzzer.id)
         elif rnd < 0.1:
             buzzer.buzz(duration)
