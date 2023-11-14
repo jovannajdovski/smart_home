@@ -16,11 +16,11 @@ def uds_callback(distance, id):
 
 def run_uds(settings, threads, stop_event):
         if settings['simulated']:
-            print(f"\nStarting {settings['id']} sumilator\n")
+            print(f"\nStarting {settings['id']} simulator\n")
             uds_thread = threading.Thread(target = run_uds_simulator, args=(settings['id'], 1, uds_callback, stop_event))
             uds_thread.start()
             threads.append(uds_thread)
-            print(f"\n{settings['id']} sumilator started\n")
+            print(f"\n{settings['id']} simulator started\n")
         else:
             from sensors.uds import run_uds_loop, UDS
             print(f"\nStarting {settings['id']} loop\n")
