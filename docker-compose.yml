@@ -1,0 +1,55 @@
+version: "3.7"
+services:
+
+  mqtt5:
+    image: eclipse-mosquitto
+    container_name: mqtt5
+    ports:
+      - "1883:1883" 
+      - "9001:9001" 
+    volumes:
+      - ./mqtt/broker-config:/mosquitto/config:rw
+      - ./mqtt/broker-data:/mosquitto/data:rw
+      - ./mqtt/broker-log:/mosquitto/log:rw
+    networks:
+      - iot-network
+
+  influxdb-iot:
+    image: influxdb
+    container_name: influxdb-iot
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=${INFLUXDB_DB}
+      - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
+      - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb:rw
+    networks:
+      - iot-network
+  
+  grafana-iot:
+    image: grafana/grafana:latest
+    container_name: grafana-iot
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana:/var/lib/grafana
+    depends_on:
+      - influxdb-iot
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    networks:
+      - iot-network
+
+volumes:
+  config:
+  data:
+  log:
+  influxdb:
+  grafana:
+
+networks:
+  iot-network:
+    name: iot-network
