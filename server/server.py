@@ -9,10 +9,10 @@ app = Flask(__name__)
 
 
 # InfluxDB Configuration
-token = "_Vs7GIsHexg07Ivy52m6ZlNzGeZuFrZ5L186h7I-Zx--eAlQTzlwjep03FzDmoRqJiS4wmN1pDSyfddkhIoRfQ=="
+token = "DO-FFdev8G24pNFMFT7QDv4XYU3iijl__DnNmqaG6H7nCqom_CbxIRopPfcHzmKzLU2an-dyMvI9CZPuuwbBYg=="
 org = "FTN"
-url = "http://localhost:8086"
-bucket = "example_db"
+url = "http://localhost:8087"
+bucket = "iot_db"
 influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 
 
@@ -98,4 +98,4 @@ def test_endpoint():
     return "rerna"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

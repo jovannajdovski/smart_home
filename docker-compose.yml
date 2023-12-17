@@ -5,8 +5,8 @@ services:
     image: eclipse-mosquitto
     container_name: mqtt5
     ports:
-      - "1883:1883" 
-      - "9001:9001" 
+      - "1884:1884" 
+      - "9002:9001" 
     volumes:
       - ./mqtt/broker-config:/mosquitto/config:rw
       - ./mqtt/broker-data:/mosquitto/data:rw
@@ -18,7 +18,7 @@ services:
     image: influxdb
     container_name: influxdb-iot
     ports:
-      - "8086:8086"
+      - "8087:8086"
     environment:
       - INFLUXDB_DB=${INFLUXDB_DB}
       - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
@@ -27,12 +27,12 @@ services:
       - ./influxdb/data:/var/lib/influxdb:rw
     networks:
       - iot-network
-  
+
   grafana-iot:
     image: grafana/grafana:latest
     container_name: grafana-iot
     ports:
-      - '3000:3000'
+      - '3001:3000'
     volumes:
       - grafana:/var/lib/grafana
     depends_on:
