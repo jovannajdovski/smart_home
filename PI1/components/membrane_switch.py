@@ -1,7 +1,8 @@
 from simulators.membrane_switch import run_membrane_switch_simulator
 import threading
 import time
-from utils.safe_print import safe_print  
+from utils.safe_print import safe_print
+from utils.mqtt import publish_message 
 
 def membrane_switch_callback(key, id):      
     t = time.localtime()
@@ -10,6 +11,7 @@ def membrane_switch_callback(key, id):
                 f"Timestamp: {time.strftime('%H:%M:%S', t)}",
                 f"KEY PRESSED: {key}"
                 )
+    
 
 
 def run_membrane_switch(settings, threads, stop_event):

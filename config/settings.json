@@ -1,0 +1,106 @@
+{
+    "RDHT1": {
+        "id": "RDHT1",
+        "type": "DHT",
+        "area": "Room",
+        "simulated": true,
+        "pin": 17,
+        "name": "Room 1 DHT",
+        "connectedToPi": 1
+    },
+    "RDHT2": {
+        "id": "RDHT2",
+        "type": "DHT",
+        "area": "Room",
+        "simulated": true,
+        "pin": 27,
+        "name": "Room 2 DHT",
+        "connectedToPi": 1
+    },
+    "DUS1": {
+        "id": "DUS1",
+        "type": "US",
+        "area": "Door",
+        "simulated": true,
+        "trig_pin": 23,
+        "echo_pin": 24,
+        "name": "Door Ultrasonic Sensor",
+        "connectedToPi": 1
+    },
+    "DPIR1": {
+        "id": "DPIR1",
+        "type": "PIR",
+        "area": "Door",
+        "simulated": true,
+        "pin": 4,
+        "name": "Door Motion Sensor",
+        "connectedToPi": 1
+    },
+    "RPIR1": {
+        "id": "RPIR1",
+        "type": "PIR",
+        "area": "Room",
+        "simulated": true,
+        "pin": 5,
+        "name": "Room Motion Sensor",
+        "connectedToPi": 1
+    },
+    "RPIR2": {
+        "id": "RPIR2",
+        "type": "PIR",
+        "area": "Room",
+        "simulated": true,
+        "pin": 6,
+        "name": "Room Motion Sensor",
+        "connectedToPi": 1
+    },
+    "DB": {
+        "id": "DB",
+        "simulated": true,
+        "type": "BUZZER",
+        "area": "Door",
+        "pin": 25,
+        "pitch": 440,
+        "name": "Door Buzzer",
+        "connectedToPi": 1
+    },
+    "DS1":{
+        "id": "DS1",
+        "type": "BUTTON",
+        "area": "Door",
+        "simulated": true,
+        "pin": 22,
+        "name": "Door Sensor (Button)",
+        "connectedToPi": 1
+    },
+    "DL":{
+        "id": "DL",
+        "type": "LIGHT",
+        "area": "Door",
+        "simulated": true,
+        "red_pin": 12,
+        "green_pin": 13,
+        "blue_pin": 19,
+        "name": "Door Light",
+        "connectedToPi": 1 
+    },
+    "DMS":{
+        "id":"DMS",
+        "type": "MS",
+        "area": "Door",
+        "simulated": true,
+        "r1_pin": 10,
+        "r2_pin": 9,
+        "r3_pin": 11,
+        "r4_pin": 8,
+        "c1_pin": 7,
+        "c2_pin": 16,
+        "c3_pin": 20,
+        "c4_pin": 21,
+        "name": "Door Membrane Switch",
+        "connectedToPi": 1
+    },
+    "PI1_running": true,
+    "PI2_running": false,
+    "PI3_running": false
+}

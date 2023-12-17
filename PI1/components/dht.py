@@ -2,7 +2,8 @@
 from simulators.dht import run_dht_simulator
 import threading
 import time
-from utils.safe_print import safe_print   
+from utils.safe_print import safe_print
+from utils.mqtt import publish_message 
 
 def dht_callback(humidity, temperature, code, id):
     t = time.localtime()

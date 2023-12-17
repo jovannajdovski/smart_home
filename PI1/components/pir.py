@@ -1,7 +1,8 @@
 from simulators.pir import run_pir_simulator
 import threading
 import time
-from utils.safe_print import safe_print  
+from utils.safe_print import safe_print
+from utils.mqtt import publish_message 
 
 def pir_callback(motion_detected, id):
     if motion_detected:         

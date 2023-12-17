@@ -1,7 +1,8 @@
 
 import threading
 import time
-from utils.safe_print import safe_print  
+from utils.safe_print import safe_print
+from utils.mqtt import publish_message 
 
 def buzzer_callback(code, id):      
     t = time.localtime()
@@ -10,6 +11,7 @@ def buzzer_callback(code, id):
                 f"Timestamp: {time.strftime('%H:%M:%S', t)}",
                 f"BUZZER: {code} activated"
                 )
+    
 
 
 def run_buzzer(settings, threads, stop_event):
