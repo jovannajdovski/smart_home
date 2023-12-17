@@ -32,7 +32,7 @@
     },
     "DB": {
         "id": "DB",
-        "simulated": true,
+        "simulated": false,
         "pin": 25,
         "pitch": 440
     },
@@ -43,7 +43,7 @@
     },
     "DL":{
         "id": "DL",
-        "simulated": true,
+        "simulated": false,
         "red_pin": 12,
         "green_pin": 13,
         "blue_pin": 19 

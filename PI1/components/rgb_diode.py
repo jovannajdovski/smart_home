@@ -1,4 +1,4 @@
-from simulators.rgb_diode import run_rgb_diode_simulator
+
 import threading
 import time
 from utils.safe_print import safe_print  
@@ -14,6 +14,7 @@ def rgb_diode_callback(color, id):
 
 def run_rgb_diode(settings, threads, stop_event):
     if settings['simulated']:
+        from simulators.rgb_diode import run_rgb_diode_simulator
         print(f"\nStarting {settings['id']} simulator\n")
         rgb_diode_thread = threading.Thread(target = run_rgb_diode_simulator, args=(settings['id'], 0.5, rgb_diode_callback, stop_event))
         rgb_diode_thread.start()

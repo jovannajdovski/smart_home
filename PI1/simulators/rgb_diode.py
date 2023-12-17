@@ -13,8 +13,8 @@ def on_press(key, callback, id):
     key = str(key).replace("'", "")
     if key == "r":
         callback(RED + "red" + RESET, id)
-    # elif key == "b":
-    #     callback(BLUE + "blue" + RESET, id) 
+    elif key == "b":
+        callback(BLUE + "blue" + RESET, id) 
     elif key == "g":
         callback(GREEN + "green" + RESET, id) 
     elif key == "w":

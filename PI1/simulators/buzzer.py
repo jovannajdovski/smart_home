@@ -25,7 +25,7 @@ def on_press(key, callback, id):
     if key == "a":
         alarm()
         callback("ALARM", id)
-    elif key == "b":
+    elif key == "z":
         beep()
         callback("BUZZ", id)
 
