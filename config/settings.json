@@ -142,6 +142,15 @@
         "name": "Garage LCD",
         "connectedToPi": 2
     },
+    "BRGB":{
+        "id": "BRGB",
+        "type": "RGB LIGHT",
+        "area": "Bedroom",
+        "simulated": true,
+        "pin": 16,
+        "name": "Bedroom RGB",
+        "connectedToPi": 3 
+    },
     "PI1_running": true,
     "PI2_running": true,
     "PI3_running": true
