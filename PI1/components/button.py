@@ -2,6 +2,7 @@ from simulators.button import run_button_simulator
 import threading
 import time
 from utils.safe_print import safe_print  
+from utils.mqtt import publish_message 
 
 def button_callback(id):      
     t = time.localtime()

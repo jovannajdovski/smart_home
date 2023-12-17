@@ -1,7 +1,8 @@
 from simulators.rgb_diode import run_rgb_diode_simulator
 import threading
 import time
-from utils.safe_print import safe_print  
+from utils.safe_print import safe_print
+from utils.mqtt import publish_message 
 
 def rgb_diode_callback(color, id):      
     t = time.localtime()

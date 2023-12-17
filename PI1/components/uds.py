@@ -1,7 +1,8 @@
 from simulators.uds import run_uds_simulator
 import threading
 import time
-from utils.safe_print import safe_print  
+from utils.safe_print import safe_print
+from utils.mqtt import publish_message 
 
 def uds_callback(distance, id):
     if distance is not None:         

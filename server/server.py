@@ -22,12 +22,27 @@ mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
 def on_connect(client, userdata, flags, rc):
-    client.subscribe("Temperature")
-    client.subscribe("Humidity")
+    client.subscribe("BUTTON")
+    client.subscribe("LIGHT")
+    client.subscribe("US")
+    client.subscribe("BUZZER")
+    client.subscribe("PIR")
+    client.subscribe("MS")
+    client.subscribe("DHT")
+    client.subscribe("GYRO")
+    client.subscribe("LCD")
+    client.subscribe("4DD")
+
+
+def on_message(client, userdata, msg):
+    print(f"Received message on topic: {msg.topic}")
+    data = json.loads(msg.payload.decode('utf-8'))
+    print(data)
+    print('\n')
+    # save_to_db(data)
 
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
-
+mqtt_client.on_message = on_message
 
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
