@@ -10,6 +10,7 @@ from components.rgb_diode import run_rgb_diode
 from components.membrane_switch import run_membrane_switch
 from components.gyro import run_gyro
 from components.segment_display import run_4segment_display
+from components.lcd import run_lcd
 import time
 
 try:
@@ -44,6 +45,8 @@ def run_pi1(settings, threads, stop_event):
 def run_pi2(settings, threads, stop_event):
     gsg_settings = settings['GSG']
     run_gyro(gsg_settings, threads, stop_event)
+    glcd_settings = settings['GLCD']
+    run_lcd(glcd_settings, threads, stop_event)
 
 def run_pi3(settings, threads, stop_event):
     b4sd_settings = settings['B4SD']

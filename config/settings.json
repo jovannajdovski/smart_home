@@ -128,6 +128,20 @@
         "name": "Bedroom 4 Digit 7 Segment Display",
         "connectedToPi": 3
     },
+    "GLCD":{
+        "id":"GLCD",
+        "type": "LCD",
+        "area": "Garage",
+        "simulated": true,
+        "pin_rs": 0,
+        "pin_e": 2,
+        "pin_db1": 4,
+        "pin_db2": 5,
+        "pin_db3": 6,
+        "pin_db4": 7,
+        "name": "Garage LCD",
+        "connectedToPi": 2
+    },
     "PI1_running": true,
     "PI2_running": true,
     "PI3_running": true
