@@ -9,6 +9,7 @@ from components.button import run_button
 from components.rgb_diode import run_rgb_diode
 from components.membrane_switch import run_membrane_switch
 import time
+from utils.mqtt import connect
 
 try:
     import RPi.GPIO as GPIO
@@ -16,7 +17,7 @@ try:
 except:
     pass
 
-def run_pi1():
+def run_pi1(settings, threads, stop_event):
     rdht1_settings = settings['RDHT1']
     rdht2_settings = settings['RDHT2']
     dus1_settings = settings['DUS1']
@@ -46,17 +47,18 @@ def run_pi3():
 
 
 if __name__ == "__main__":
-    print('\nStarting PI1 controller\n')
     settings = load_settings()
-    threads = []
+    stop_threads = []
     stop_event = threading.Event()
+    
+    # connect()
     try:
         if settings["PI1_running"]:
-            run_pi1(settings, threads, stop_event)
+            run_pi1(settings, stop_threads, stop_event)
         if settings["PI2_running"]:
-            run_pi2(settings, threads, stop_event)
+            run_pi2(settings, stop_threads, stop_event)
         if settings["PI3_running"]:
-            run_pi3(settings, threads, stop_event)
+            run_pi3(settings, stop_threads, stop_event)
         
        
         while True:
@@ -64,5 +66,8 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print('\nStopping PI1 controller\n')
-        for t in threads:
-            stop_event.set()
+        stop_event.set()
+        # for t in stop_threads:
+            
+        #     t.join()
+            

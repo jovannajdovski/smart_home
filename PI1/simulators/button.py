@@ -9,11 +9,11 @@ def generate_values(probability=0.2):
             yield False
 
 
-def run_button_simulator(id, delay, callback, stop_event):
+def run_button_simulator(settings, delay, callback, stop_event):
     for button_pressed in generate_values():
         time.sleep(delay)
         if button_pressed:
-            callback(id)
+            callback(settings)
         if stop_event.is_set():
             break
 

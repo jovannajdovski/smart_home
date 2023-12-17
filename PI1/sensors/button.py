@@ -10,8 +10,8 @@ class Button(object):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
-def run_button_loop(button, delay, callback, stop_event):
-    GPIO.add_event_detect(button.pin, GPIO.RISING, callback = callback, bouncetime = 100)
+def run_button_loop(button, settings, delay, callback, stop_event):
+    GPIO.add_event_detect(button.pin, GPIO.RISING, callback=lambda x: callback(settings), bouncetime = 100)
     
     while not stop_event.is_set():
         time.sleep(delay)

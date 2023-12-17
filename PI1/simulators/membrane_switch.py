@@ -12,10 +12,10 @@ def generate_values(probability=0.2):
             yield None
 
 
-def run_membrane_switch_simulator(id, delay, callback, stop_event):
+def run_membrane_switch_simulator(settings, delay, callback, stop_event):
     for pressed_key in generate_values():
         time.sleep(delay)
         if pressed_key is not None:
-            callback(pressed_key, id)
+            callback(pressed_key, settings)
         if stop_event.is_set():
             break

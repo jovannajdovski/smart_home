@@ -15,9 +15,9 @@ def generate_values(probability=0.05):
             yield False
 
       
-def run_pir_simulator(id, delay, callback, stop_event):
+def run_pir_simulator(settings, delay, callback, stop_event):
     for motion_detected in generate_values():
         time.sleep(delay)
-        callback(motion_detected, id)
+        callback(motion_detected, settings)
         if stop_event.is_set():
                 break

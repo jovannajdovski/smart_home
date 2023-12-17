@@ -42,23 +42,23 @@ class RgbDiode(object):
     
 
 
-def run_rgb_diode_loop(rgb_diode, delay, callback, stop_event):
+def run_rgb_diode_loop(rgb_diode, settings, delay, callback, stop_event):
     
     while not stop_event.is_set():
         rnd = random.random()
         if rnd < 0.2:
             rgb_diode.turn_red()
-            callback("red", rgb_diode.id)
+            callback("red", settings)
         elif rnd < 0.4:
             rgb_diode.turn_blue()
-            callback("blue", rgb_diode.id) 
+            callback("blue", settings) 
         elif rnd < 0.6:
             rgb_diode.turn_green()
-            callback("green", rgb_diode.id) 
+            callback("green", settings) 
         elif rnd < 0.8:
             rgb_diode.turn_white()
-            callback("white", rgb_diode.id)
+            callback("white", settings)
         else:
             rgb_diode.turn_off()
-            callback("off", rgb_diode.id)
+            callback("off", settings)
         time.sleep(delay)

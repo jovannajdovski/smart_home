@@ -19,11 +19,11 @@ def generate_values(initial_temp = 25, initial_humidity=20):
 
       
 
-def run_dht_simulator(id, delay, callback, stop_event):
+def run_dht_simulator(settings, delay, callback, stop_event):
         for h, t in generate_values():
             time.sleep(delay)
             simulator_code = "DHTLIB_OK"
-            callback(h, t, simulator_code, id)
+            callback(h, t, simulator_code, settings)
             if stop_event.is_set():
                   break
               

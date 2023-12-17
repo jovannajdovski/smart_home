@@ -9,22 +9,22 @@ BLUE = "\033[34m"
 RESET = "\033[0m"
 
 
-def on_press(key, callback, id):
+def on_press(key, callback, settings):
     key = str(key).replace("'", "")
     if key == "r":
-        callback(RED + "red" + RESET, id)
+        callback(RED + "red" + RESET, settings)
     elif key == "b":
-        callback(BLUE + "blue" + RESET, id) 
+        callback(BLUE + "blue" + RESET, settings) 
     elif key == "g":
-        callback(GREEN + "green" + RESET, id) 
+        callback(GREEN + "green" + RESET, settings) 
     elif key == "w":
-        callback(WHITE + "white" + RESET, id)
+        callback(WHITE + "white" + RESET, settings)
     elif key == "o":
-        callback("off", id)
+        callback("off", settings)
 
 
-def run_rgb_diode_simulator(id, delay, callback, stop_event):
-    listener = keyboard.Listener(on_press=lambda key: on_press(key, callback, id))
+def run_rgb_diode_simulator(settings, delay, callback, stop_event):
+    listener = keyboard.Listener(on_press=lambda key: on_press(key, callback, settings))
     listener.start()
 
     while not stop_event.is_set():

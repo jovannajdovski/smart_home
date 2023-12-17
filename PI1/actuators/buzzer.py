@@ -28,16 +28,16 @@ class Buzzer(object):
             self.buzz(buzz_duration)
             time.sleep(buzz_duration)
 
-def run_buzzer_loop(buzzer, delay, duration, callback, stop_event):
+def run_buzzer_loop(buzzer, settings, delay, duration, callback, stop_event):
     while True:
         # :TODO add some logic
         rnd = random.random()
         if rnd < 0.05:
             buzzer.alarm(duration, 60*duration)
-            callback("ALARM", buzzer.id)
+            callback("ALARM", settings)
         elif rnd < 0.1:
             buzzer.buzz(duration)
-            callback("BUZZ", buzzer.id)
+            callback("BUZZ", settings)
         if stop_event.is_set():
             GPIO.cleanup()
             break

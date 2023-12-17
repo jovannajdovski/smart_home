@@ -17,10 +17,10 @@ class PIR(object):
         motion_detected = GPIO.input(self.pin)
         return motion_detected
 
-def run_pir_loop(pir, delay, callback, stop_event):
+def run_pir_loop(pir, settings, delay, callback, stop_event):
     while True:
         motion_detected = pir.detect_motion()
-        callback(motion_detected, pir.id)
+        callback(motion_detected, settings)
         if stop_event.is_set():
             GPIO.cleanup()
             break

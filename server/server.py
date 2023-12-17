@@ -18,10 +18,9 @@ influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 
 # MQTT Configuration
 mqtt_client = mqtt.Client()
-mqtt_client.connect("localhost", 1883, 60)
-mqtt_client.loop_start()
 
 def on_connect(client, userdata, flags, rc):
+    print('CONNECT')
     client.subscribe("BUTTON")
     client.subscribe("LIGHT")
     client.subscribe("US")
@@ -35,14 +34,14 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(f"Received message on topic: {msg.topic}")
+    print(f"Rec. TOPIC \t: {msg.topic}")
     data = json.loads(msg.payload.decode('utf-8'))
-    print(data)
-    print('\n')
     # save_to_db(data)
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
+mqtt_client.connect("localhost", 1883, 60)
+mqtt_client.loop_start()
 
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -98,4 +97,4 @@ def test_endpoint():
     return "rerna"
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

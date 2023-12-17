@@ -39,20 +39,20 @@ class MembraneSwitch(object):
         GPIO.output(line, GPIO.LOW)
 
 
-def run_membrane_switch_loop(membrane_switch, delay, callback, stop_event):
+def run_membrane_switch_loop(membrane_switch, settings, delay, callback, stop_event):
     while True:
         pressed_key = membrane_switch.detect_line_press(membrane_switch.r1_pin, ["1","2","3","A"])
         if pressed_key: 
-            callback(pressed_key,membrane_switch.id)
+            callback(pressed_key, settings)
         pressed_key = membrane_switch.detect_line_press(membrane_switch.r2_pin, ["4","5","6","B"])
         if pressed_key: 
-            callback(pressed_key,membrane_switch.id)
+            callback(pressed_key,settings)
         pressed_key = membrane_switch.detect_line_press(membrane_switch.r3_pin, ["7","8","9","C"])
         if pressed_key: 
-            callback(pressed_key,membrane_switch.id)
+            callback(pressed_key,settings)
         pressed_key = membrane_switch.detect_line_press(membrane_switch.r4_pin, ["*","0","#","D"])
         if pressed_key: 
-            callback(pressed_key,membrane_switch.id)
+            callback(pressed_key,settings)
 
         if stop_event.is_set():
             GPIO.cleanup()
