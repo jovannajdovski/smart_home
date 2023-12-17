@@ -108,7 +108,27 @@
         "name": "Gun Safe Gyro (Gyroscope)",
         "connectedToPi": 2
     },
+    "B4SD":{
+        "id":"B4SD",
+        "type": "4 Digit 7 Segment Display",
+        "area": "Bedroom",
+        "simulated": true,
+        "seg_pin1": 11,
+        "seg_pin2": 4,
+        "seg_pin3": 23,
+        "seg_pin4": 8,
+        "seg_pin5": 7,
+        "seg_pin6": 10,
+        "seg_pin7": 18,
+        "seg_pin8": 25,
+        "dig_pin1": 22,
+        "dig_pin2": 27,
+        "dig_pin3": 17,
+        "dig_pin4": 24,
+        "name": "Bedroom 4 Digit 7 Segment Display",
+        "connectedToPi": 3
+    },
     "PI1_running": true,
     "PI2_running": true,
-    "PI3_running": false
+    "PI3_running": true
 }
