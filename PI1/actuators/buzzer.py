@@ -1,4 +1,4 @@
-import RPI.GPIO as GPIO
+import RPi.GPIO as GPIO
 import time
 import random
 
@@ -33,7 +33,7 @@ def run_buzzer_loop(buzzer, settings, delay, duration, callback, stop_event):
         # :TODO add some logic
         rnd = random.random()
         if rnd < 0.05:
-            buzzer.alarm(duration, 60*duration)
+            buzzer.alarm(duration, 10*duration)
             callback("ALARM", settings)
         elif rnd < 0.1:
             buzzer.buzz(duration)

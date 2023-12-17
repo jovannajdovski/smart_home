@@ -1,4 +1,4 @@
-from simulators.buzzer import run_buzzer_simulator
+
 import threading
 import time
 from utils.safe_print import safe_print
@@ -25,6 +25,7 @@ def buzzer_callback(code, settings):
 def run_buzzer(settings, threads, stop_event):
         # threads.append(publisher_thread)
         if settings['simulated']:
+            from simulators.buzzer import run_buzzer_simulator
             print(f"\nStarting {settings['id']} simulator\n")
             buzzer_thread = threading.Thread(target = run_buzzer_simulator, args=(settings, 0.1, buzzer_callback, stop_event))
             buzzer_thread.start()
@@ -34,6 +35,7 @@ def run_buzzer(settings, threads, stop_event):
             from actuators.buzzer import run_buzzer_loop, Buzzer
             print(f"\nStarting {settings['id']} loop\n")
             buzzer = Buzzer(settings['id'], settings['pin'], settings['pitch'])
+            buzzer.setup_buzzer()
             buzzer_thread = threading.Thread(target=run_buzzer_loop, args=(buzzer, settings, 3, 0.5, buzzer_callback, stop_event))
             buzzer_thread.start()
             threads.append(buzzer_thread)

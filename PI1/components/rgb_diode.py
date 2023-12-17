@@ -1,4 +1,4 @@
-from simulators.rgb_diode import run_rgb_diode_simulator
+
 import threading
 import time
 from utils.safe_print import safe_print
@@ -27,6 +27,7 @@ def rgb_diode_callback(color, settings):
 def run_rgb_diode(settings, threads, stop_event):
     # threads.append(publisher_thread)
     if settings['simulated']:
+        from simulators.rgb_diode import run_rgb_diode_simulator
         print(f"\nStarting {settings['id']} simulator\n")
         rgb_diode_thread = threading.Thread(target = run_rgb_diode_simulator, args=(settings, 0.5, rgb_diode_callback, stop_event))
         rgb_diode_thread.start()
@@ -36,6 +37,7 @@ def run_rgb_diode(settings, threads, stop_event):
         from actuators.rgb_diode import run_rgb_diode_loop, RgbDiode
         print(f"\nStarting {settings['id']} loop\n")
         rgb_diode = RgbDiode(settings['id'], settings['red_pin'], settings['green_pin'], settings['blue_pin'])
+        rgb_diode.setup_rgb_diode()
         rgb_diode_thread = threading.Thread(target=run_rgb_diode_loop, args=(rgb_diode, settings, 0.5, rgb_diode_callback, stop_event))
         rgb_diode_thread.start()
         threads.append(rgb_diode_thread)
