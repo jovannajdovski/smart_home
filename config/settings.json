@@ -100,7 +100,15 @@
         "name": "Door Membrane Switch",
         "connectedToPi": 1
     },
+    "GSG":{
+        "id":"GSG",
+        "type": "GYRO",
+        "area": "W.I.C. Room",
+        "simulated": true,
+        "name": "Gun Safe Gyro (Gyroscope)",
+        "connectedToPi": 2
+    },
     "PI1_running": true,
-    "PI2_running": false,
+    "PI2_running": true,
     "PI3_running": false
 }
