@@ -59,7 +59,7 @@ class SegmentDisplay(object):
     
 
 
-def display_time_on_segment_display(display, delay, callback, stop_event):
+def display_time_on_segment_display(display, settings, delay, callback, stop_event):
     
     while not stop_event.is_set():
         n = time.ctime()[11:13]+time.ctime()[14:16]
@@ -67,5 +67,5 @@ def display_time_on_segment_display(display, delay, callback, stop_event):
 
         display.display_time(s)
 
-        callback(s[0], s[1], s[2], s[3], display.id)
+        callback(s[0], s[1], s[2], s[3], settings)
         time.sleep(delay)

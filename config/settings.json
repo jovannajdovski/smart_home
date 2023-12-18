@@ -110,7 +110,7 @@
     },
     "B4SD":{
         "id":"B4SD",
-        "type": "4 Digit 7 Segment Display",
+        "type": "4DD",
         "area": "Bedroom",
         "simulated": true,
         "seg_pin1": 11,
@@ -144,7 +144,7 @@
     },
     "BRGB":{
         "id": "BRGB",
-        "type": "RGB LIGHT",
+        "type": "RGB-LIGHT",
         "area": "Bedroom",
         "simulated": true,
         "pin": 16,

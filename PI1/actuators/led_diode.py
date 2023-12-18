@@ -18,14 +18,14 @@ class LedDiode(object):
         GPIO.output(self.pin, GPIO.LOW)
 
 
-def run_led_diode_loop(led_diode, delay, callback, stop_event):
+def run_led_diode_loop(led_diode, settings, delay, callback, stop_event):
     
     while not stop_event.is_set():
         rnd = random.random()
         if rnd < 0.2:
             led_diode.turn_on()
-            callback("on", led_diode.id)
+            callback("on", settings)
         else:
             led_diode.turn_off()
-            callback("off", led_diode.id)
+            callback("off", settings)
         time.sleep(delay)

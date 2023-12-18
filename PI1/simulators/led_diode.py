@@ -13,8 +13,8 @@ def on_press(key, callback, id):
         callback("off", id)
 
 
-def run_led_diode_simulator(id, delay, callback, stop_event):
-    listener = keyboard.Listener(on_press=lambda key: on_press(key, callback, id))
+def run_led_diode_simulator(settings, delay, callback, stop_event):
+    listener = keyboard.Listener(on_press=lambda key: on_press(key, callback, settings))
     listener.start()
 
     while not stop_event.is_set():

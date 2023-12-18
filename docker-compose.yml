@@ -5,8 +5,8 @@ services:
     image: eclipse-mosquitto
     container_name: mqtt5
     ports:
-      - "1884:1884" 
-      - "9002:9001" 
+      - "1883:1883" 
+      - "9001:9001" 
     volumes:
       - ./mqtt/broker-config:/mosquitto/config:rw
       - ./mqtt/broker-data:/mosquitto/data:rw

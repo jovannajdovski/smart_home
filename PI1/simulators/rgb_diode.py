@@ -24,6 +24,7 @@ def on_press(key, callback, settings):
 
 
 def run_rgb_diode_simulator(settings, delay, callback, stop_event):
+    
     listener = keyboard.Listener(on_press=lambda key: on_press(key, callback, settings))
     listener.start()
 

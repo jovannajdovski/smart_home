@@ -8,7 +8,7 @@ from utils.counter import Counter
 
 batch = []
 publish_data_counter = Counter(0)
-publish_data_limit = 1
+publish_data_limit = 5
 publish_event=threading.Event()
 counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
@@ -32,7 +32,7 @@ def uds_callback(distance, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': distance
+             'value': float(distance)
         }
         with counter_lock:
             batch.append((settings['type'], json.dumps(payload), 0, True))

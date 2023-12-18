@@ -3,13 +3,14 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
+from datetime import datetime
 
 
 app = Flask(__name__)
 
 
 # InfluxDB Configuration
-token = "DO-FFdev8G24pNFMFT7QDv4XYU3iijl__DnNmqaG6H7nCqom_CbxIRopPfcHzmKzLU2an-dyMvI9CZPuuwbBYg=="
+token = "_Vs7GIsHexg07Ivy52m6ZlNzGeZuFrZ5L186h7I-Zx--eAlQTzlwjep03FzDmoRqJiS4wmN1pDSyfddkhIoRfQ=="
 org = "FTN"
 url = "http://localhost:8087"
 bucket = "iot_db"
@@ -22,21 +23,22 @@ mqtt_client = mqtt.Client()
 def on_connect(client, userdata, flags, rc):
     print('CONNECT')
     client.subscribe("BUTTON")
-    client.subscribe("LIGHT")
+    client.subscribe("LIGHT") #actuator
     client.subscribe("US")
-    client.subscribe("BUZZER")
+    client.subscribe("BUZZER") #actuator
     client.subscribe("PIR")
     client.subscribe("MS")
     client.subscribe("DHT")
     client.subscribe("GYRO")
-    client.subscribe("LCD")
-    client.subscribe("4DD")
+    client.subscribe("LCD") #actuator
+    client.subscribe("4DD") #actuator
+    client.subscribe("RGB-LIGHT") #actuator
 
 
 def on_message(client, userdata, msg):
     print(f"Rec. TOPIC \t: {msg.topic}")
     data = json.loads(msg.payload.decode('utf-8'))
-    # save_to_db(data)
+    save_to_db(data)
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
@@ -48,10 +50,21 @@ def save_to_db(data):
     point = (
         Point(data["measurement"])
         .tag("simulated", data["simulated"])
-        .tag("runs_on", data["runs_on"])
+        .tag("runs_on", data["connectedToPi"])
         .tag("name", data["name"])
-        .field("measurement", data["value"])
+        .tag("id",data['id'])
+        .time(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'))
     )
+    measurement=data["measurement"]
+    value=data["value"]
+    gyro_column_names=['_x','_y','_z']
+    if isinstance(value, list):
+        for i, element in enumerate(value):
+            field_name = measurement+gyro_column_names[i]  # Adjust the field name as needed
+            point = point.field(field_name, element)
+    else:
+        # If 'value' is not a list, add a single field
+        point = point.field("measurement", value)
     write_api.write(bucket=bucket, org=org, record=point)
 
 

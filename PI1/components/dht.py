@@ -9,7 +9,7 @@ from utils.counter import Counter
 
 batch = []
 publish_data_counter = Counter(0)
-publish_data_limit = 2
+publish_data_limit = 5
 publish_event=threading.Event()
 counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
@@ -31,7 +31,7 @@ def dht_callback(humidity, temperature, code, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': humidity
+             'value': float(humidity)
         }
     temperature_payload={
              'measurement': 'Temperature',
@@ -39,13 +39,12 @@ def dht_callback(humidity, temperature, code, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': temperature
+             'value': float(temperature)
         }
     with counter_lock:
         
         batch.append((settings['type'], json.dumps(humidity_payload), 0, True))
         batch.append((settings['type'], json.dumps(temperature_payload), 0, True))
-        publish_data_counter.increment()
         publish_data_counter.increment()
     if publish_data_counter.value>=publish_data_limit:
         publish_event.set()

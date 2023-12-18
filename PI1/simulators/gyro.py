@@ -50,10 +50,10 @@ def generate_values(initial_raw_accel = 1, initial_raw_gyro=1):
 
       
 
-def run_gyro_simulator(id, delay, callback, stop_event):
+def run_gyro_simulator(settings, delay, callback, stop_event):
         for accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z in generate_values():
             time.sleep(delay)
-            callback(accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, id)
+            callback(accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, settings)
             if stop_event.is_set():
                   break
               

@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 
 
-def run_lcd_simulator(id, delay, callback, stop_event):
+def run_lcd_simulator(settings, delay, callback, stop_event):
 
     while not stop_event.is_set():
         current_time = datetime.now()
@@ -12,5 +12,5 @@ def run_lcd_simulator(id, delay, callback, stop_event):
 
         text = f"Current time : {current_hour}:{current_minute}"
 
-        callback(text, id)
+        callback(text, settings)
         time.sleep(delay)
