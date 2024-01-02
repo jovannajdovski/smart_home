@@ -9,6 +9,7 @@ mqtt_lock=threading.Lock()
 def connect():
     global mqtt_client
     mqtt_client.connect("localhost", 1883, 60)
+    # mqtt_client.connect("10.1.121.102", 1883, 60)
     mqtt_client.loop_start()
 
 def publish_message(event, batch, device_lock, counter):
@@ -20,4 +21,6 @@ def publish_message(event, batch, device_lock, counter):
             batch.clear()
         with mqtt_lock:
             publish.multiple(local_batch, hostname="localhost", port=1883)
+            # publish.multiple(local_batch, hostname="10.1.121.102", port=1883)
+            
         event.clear()

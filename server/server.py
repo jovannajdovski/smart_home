@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 # InfluxDB Configuration
-token = "_Vs7GIsHexg07Ivy52m6ZlNzGeZuFrZ5L186h7I-Zx--eAlQTzlwjep03FzDmoRqJiS4wmN1pDSyfddkhIoRfQ=="
+token = "p0nt4441Gai1facWxG2wsJ3m9VHVCdn3Ee81ur-X3Bsi2VhBQ8_ToTyMQQX81QuEg1oieQgJ4yeHpHYh4oGZLQ=="
 org = "FTN"
 url = "http://localhost:8087"
 bucket = "iot_db"
@@ -42,7 +42,7 @@ def on_message(client, userdata, msg):
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
-mqtt_client.connect("localhost", 1883, 60)
+mqtt_client.connect("10.1.121.102", 1883, 60)
 mqtt_client.loop_start()
 
 def save_to_db(data):
