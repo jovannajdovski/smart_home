@@ -12,6 +12,7 @@ from components.gyro import run_gyro
 from components.segment_display import run_4segment_display
 from components.lcd import run_lcd
 from components.led_diode import run_led_diode
+from components.ir_receiver import run_ir_receiver
 import time
 from utils.mqtt import connect
 
@@ -70,6 +71,7 @@ def run_pi3(settings, threads, stop_event):
     brgb_settings = settings['BRGB']
     bb_settings = settings['BB']
     bir_settings = settings['BIR']
+    ir_receiver_settings = settings['BREC']
 
     run_pir(rpir4_settings, threads, stop_event)
     run_dht(rdht4_settings, threads, stop_event) 
@@ -77,6 +79,7 @@ def run_pi3(settings, threads, stop_event):
     run_rgb_diode(brgb_settings, threads, stop_event)
     run_buzzer(bb_settings, threads, stop_event)
     run_pir(bir_settings, threads, stop_event)
+    run_ir_receiver(ir_receiver_settings, threads, stop_event)
 
 if __name__ == "__main__":
     settings = load_settings()

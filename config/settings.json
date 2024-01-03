@@ -8,7 +8,7 @@
         "simulated": true
     },
     "PI3": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "RDHT1": {
@@ -90,9 +90,7 @@
         "type": "LIGHT",
         "area": "Door",
         "simulated": true,
-        "red_pin": 12,
-        "green_pin": 13,
-        "blue_pin": 19,
+        "pin": 18,
         "name": "Door Light",
         "connectedToPi": 1 
     },
@@ -153,6 +151,8 @@
         "id":"GSG",
         "type": "GYRO",
         "area": "W.I.C. Room",
+        "pin_sda": 2,
+        "pin_slc": 3,
         "simulated": true,
         "name": "Gun Safe Gyro (Gyroscope)",
         "connectedToPi": 2
@@ -242,7 +242,9 @@
         "type": "RGB-LIGHT",
         "area": "Bedroom",
         "simulated": true,
-        "pin": 16,
+        "red_pin": 12,
+        "green_pin": 13,
+        "blue_pin": 19,
         "name": "Bedroom RGB",
         "connectedToPi": 3 
     },
@@ -253,6 +255,15 @@
         "simulated": true,
         "pin": 5,
         "name": "Bedroom Motion Sensor",
+        "connectedToPi": 3
+    },
+    "BREC": {
+        "id": "BREC",
+        "type": "IR-RECEIVER",
+        "area": "Bedroom",
+        "simulated": true,
+        "pin": 16,
+        "name": "Bedroom IR RECEIVER",
         "connectedToPi": 3
     }
 }
