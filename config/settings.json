@@ -161,7 +161,7 @@
         "id":"GLCD",
         "type": "LCD",
         "area": "Garage",
-        "simulated": false,
+        "simulated": true,
         "pin_rs": 0,
         "pin_e": 2,
         "pin_db1": 4,
@@ -175,7 +175,7 @@
         "id": "RPIR3",
         "type": "PIR",
         "area": "Room",
-        "simulated": false,
+        "simulated": true,
         "pin": 9,
         "name": "Room Motion Sensor",
         "connectedToPi": 2
@@ -184,7 +184,7 @@
         "id": "RDHT3",
         "type": "DHT",
         "area": "Room",
-        "simulated": false,
+        "simulated": true,
         "pin": 27,
         "name": "Room DHT",
         "connectedToPi": 2
