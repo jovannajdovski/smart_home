@@ -1,6 +1,6 @@
 {
     "PI1": {
-        "running": true,
+        "running": false,
         "simulated": true
     },
     "PI2": {
@@ -8,7 +8,7 @@
         "simulated": true
     },
     "PI3": {
-        "running": true,
+        "running": false,
         "simulated": true
     },
     "RDHT1": {
@@ -161,7 +161,7 @@
         "id":"GLCD",
         "type": "LCD",
         "area": "Garage",
-        "simulated": true,
+        "simulated": false,
         "pin_rs": 0,
         "pin_e": 2,
         "pin_db1": 4,
@@ -175,7 +175,7 @@
         "id": "RPIR3",
         "type": "PIR",
         "area": "Room",
-        "simulated": true,
+        "simulated": false,
         "pin": 9,
         "name": "Room Motion Sensor",
         "connectedToPi": 2
@@ -184,7 +184,7 @@
         "id": "RDHT3",
         "type": "DHT",
         "area": "Room",
-        "simulated": true,
+        "simulated": false,
         "pin": 27,
         "name": "Room DHT",
         "connectedToPi": 2

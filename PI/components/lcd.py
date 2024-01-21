@@ -25,6 +25,7 @@ def lcd_callback(text, settings):
 
 
 def run_lcd(settings, threads, stop_event):
+    #print("jjj")
     # threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.lcd import run_lcd_simulator

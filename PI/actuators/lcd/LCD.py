@@ -58,11 +58,12 @@ class LCD(object):
 
 
 def run_lcd_loop(lcd, settings, delay, callback, stop_event):
-    
+    print("bg")
     while not stop_event.is_set():
         rnd = random.random()
         if rnd < 0.5:
             lcd.display_time()
+            print("gg")
             text = "Hello boss, if you have password,\nyou can enter garage" 
             callback(text, settings)
         else:

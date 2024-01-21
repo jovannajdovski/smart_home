@@ -52,6 +52,7 @@ def run_pi2(settings, threads, stop_event):
     gdht_settings = settings['GDHT']
     gsg_settings = settings['GSG']
     glcd_settings = settings['GLCD']
+    print(settings['RPIR3'])
     rpir3_settings = settings['RPIR3']
     rdht3_settings = settings['RDHT3']
 

@@ -42,7 +42,7 @@ def on_message(client, userdata, msg):
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
-mqtt_client.connect("192.168.0.15", 1883, 60)   #10.1.121.102
+mqtt_client.connect("10.1.121.64", 1883, 60)   #10.1.121.102
 mqtt_client.loop_start()
 
 def save_to_db(data):
