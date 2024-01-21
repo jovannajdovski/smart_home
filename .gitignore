@@ -10,6 +10,9 @@ __pycache__/
 
 *.db
 
+mqtt/
+influxdb/
+
 # Distribution / packaging
 .Python
 build/

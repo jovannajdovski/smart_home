@@ -18,11 +18,11 @@ publisher_thread.start()
 def pir_callback(motion_detected, settings):
     if motion_detected:         
         t = time.localtime()
-        # safe_print("\n"+"="*20,
-        #            f"PIR ID: {settings['id']}",
-        #            f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-        #            "Motion detected"
-        #            )
+        safe_print("\n"+"="*20,
+                   f"PIR ID: {settings['id']}",
+                   f"Timestamp: {time.strftime('%H:%M:%S', t)}",
+                   "Motion detected"
+                   )
         payload={
              'measurement': settings['type'],
              'simulated': settings['simulated'],
@@ -40,6 +40,7 @@ def pir_callback(motion_detected, settings):
 
 
 def run_pir(settings, threads, stop_event):
+        print(settings['simulated'])
         threads.append(publisher_thread)
         if settings['simulated']:
             print(f"\nStarting {settings['id']} simulator\n")

@@ -18,8 +18,10 @@ class PIR(object):
         return motion_detected
 
 def run_pir_loop(pir, settings, delay, callback, stop_event):
+    print('izvan')
     while True:
         motion_detected = pir.detect_motion()
+        print("radiii")
         callback(motion_detected, settings)
         if stop_event.is_set():
             GPIO.cleanup()
