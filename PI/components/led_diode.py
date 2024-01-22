@@ -6,6 +6,7 @@ from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
 
+totalPersons=None
 
 
 def led_diode_callback(state, settings):      
@@ -26,8 +27,9 @@ def led_diode_callback(state, settings):
     
 
 
-def run_led_diode(settings, threads, stop_event):
-    # threads.append(publisher_thread)
+def run_led_diode(settings, _totalPersons, threads, stop_event):
+    global totalPersons
+    totalPersons=_totalPersons
     if settings['simulated']:
         from simulators.led_diode import run_led_diode_simulator
         print(f"\nStarting {settings['id']} simulator\n")

@@ -14,6 +14,7 @@ counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
 publisher_thread.daemon = True
 publisher_thread.start()
+totalPersons=None
 
 def membrane_switch_callback(key, settings):      
     t = time.localtime()
@@ -38,7 +39,9 @@ def membrane_switch_callback(key, settings):
 
 
 
-def run_membrane_switch(settings, threads, stop_event):
+def run_membrane_switch(settings, _totalPersons, threads, stop_event):
+    global totalPersons
+    totalPersons=_totalPersons
     threads.append(publisher_thread)
     if settings['simulated']:
         print(f"\nStarting {settings['id']} simulator\n")

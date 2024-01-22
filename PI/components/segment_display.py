@@ -6,7 +6,7 @@ from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
 
-
+totalPersons=None
 
 def segment_display_callback(digit1, digit2, digit3, digit4, settings):      
     t = time.localtime()
@@ -26,7 +26,9 @@ def segment_display_callback(digit1, digit2, digit3, digit4, settings):
 
 
 
-def run_4segment_display(settings, threads, stop_event):
+def run_4segment_display(settings, _totalPersons, threads, stop_event):
+    global totalPersons
+    totalPersons=_totalPersons
     # threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.segment_display import run_4segment_simulator

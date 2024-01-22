@@ -1,6 +1,7 @@
 {
+    "totalPersons":1,
     "PI1": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "PI2": {
@@ -8,7 +9,7 @@
         "simulated": true
     },
     "PI3": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "RDHT1": {

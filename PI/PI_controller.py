@@ -22,7 +22,9 @@ try:
 except:
     pass
 
-def run_pi1(settings, threads, stop_event):
+totalPersons=None
+
+def run_pi1(settings, totalPersons, threads, stop_event):
     rdht1_settings = settings['RDHT1']
     rdht2_settings = settings['RDHT2']
     dus1_settings = settings['DUS1']
@@ -33,39 +35,38 @@ def run_pi1(settings, threads, stop_event):
     ds1_settings = settings['DS1']
     dl_settings = settings['DL']
     dms_settings = settings['DMS']
-    
-    run_dht(rdht1_settings, threads, stop_event)
-    run_dht(rdht2_settings, threads, stop_event)
-    run_uds(dus1_settings, threads, stop_event)
-    run_pir(dpir1_settings, threads, stop_event)
-    run_pir(rpir1_settings, threads, stop_event)
-    run_pir(rpir2_settings, threads, stop_event)
-    run_buzzer(db_settings, threads, stop_event)
-    run_button(ds1_settings, threads, stop_event)
-    run_led_diode(dl_settings, threads, stop_event)
-    run_membrane_switch(dms_settings, threads, stop_event)
 
-def run_pi2(settings, threads, stop_event):
+    run_dht(rdht1_settings, totalPersons, threads, stop_event)
+    run_dht(rdht2_settings, totalPersons, threads, stop_event)
+    run_uds(dus1_settings, totalPersons, threads, stop_event)
+    run_pir(dpir1_settings, totalPersons, threads, stop_event)
+    run_pir(rpir1_settings, totalPersons, threads, stop_event)
+    run_pir(rpir2_settings, totalPersons, threads, stop_event)
+    run_buzzer(db_settings, totalPersons, threads, stop_event)
+    run_button(ds1_settings, totalPersons, threads, stop_event)
+    run_led_diode(dl_settings, totalPersons, threads, stop_event)
+    run_membrane_switch(dms_settings, totalPersons, threads, stop_event)
+
+def run_pi2(settings, totalPersons, threads, stop_event):
     ds2_settings = settings['DS2']
     dus2_settings = settings['DUS2']
     dpir2_settings = settings['DPIR2']
     gdht_settings = settings['GDHT']
     gsg_settings = settings['GSG']
     glcd_settings = settings['GLCD']
-    print(settings['RPIR3'])
     rpir3_settings = settings['RPIR3']
     rdht3_settings = settings['RDHT3']
 
-    run_button(ds2_settings, threads, stop_event)
-    run_uds(dus2_settings, threads, stop_event)
-    run_pir(dpir2_settings, threads, stop_event)
-    run_dht(gdht_settings, threads, stop_event)
-    run_gyro(gsg_settings, threads, stop_event)
-    run_lcd(glcd_settings, threads, stop_event)
-    run_pir(rpir3_settings, threads, stop_event)
-    run_dht(rdht3_settings, threads, stop_event) 
+    run_button(ds2_settings, totalPersons, threads, stop_event)
+    run_uds(dus2_settings, totalPersons, threads, stop_event)
+    run_pir(dpir2_settings, totalPersons, threads, stop_event)
+    run_dht(gdht_settings, totalPersons, threads, stop_event)
+    run_gyro(gsg_settings, totalPersons, threads, stop_event)
+    run_lcd(glcd_settings, totalPersons, threads, stop_event)
+    run_pir(rpir3_settings, totalPersons, threads, stop_event)
+    run_dht(rdht3_settings, totalPersons, threads, stop_event) 
 
-def run_pi3(settings, threads, stop_event):
+def run_pi3(settings, totalPersons, threads, stop_event):
     rpir4_settings = settings['RPIR4']
     rdht4_settings = settings['RDHT4']
     b4sd_settings = settings['B4SD']
@@ -74,27 +75,26 @@ def run_pi3(settings, threads, stop_event):
     bir_settings = settings['BIR']
     ir_receiver_settings = settings['BREC']
 
-    run_pir(rpir4_settings, threads, stop_event)
-    run_dht(rdht4_settings, threads, stop_event) 
-    run_4segment_display(b4sd_settings, threads, stop_event)
-    run_rgb_diode(brgb_settings, threads, stop_event)
-    run_buzzer(bb_settings, threads, stop_event)
-    run_pir(bir_settings, threads, stop_event)
-    run_ir_receiver(ir_receiver_settings, threads, stop_event)
+    run_pir(rpir4_settings, totalPersons, threads, stop_event)
+    run_dht(rdht4_settings, totalPersons, threads, stop_event) 
+    run_4segment_display(b4sd_settings, totalPersons, threads, stop_event)
+    run_rgb_diode(brgb_settings, totalPersons, threads, stop_event)
+    run_buzzer(bb_settings, totalPersons, threads, stop_event)
+    run_pir(bir_settings, totalPersons, threads, stop_event)
+    run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event)
 
 if __name__ == "__main__":
     settings = load_settings()
     stop_threads = []
     stop_event = threading.Event()
-    
-    # connect()
+    totalPersons={'value':settings["totalPersons"], 'lock': threading.Lock()}
     try:
         if settings["PI1"]["running"]:
-            run_pi1(settings, stop_threads, stop_event)
+            run_pi1(settings, totalPersons, stop_threads, stop_event)
         if settings["PI2"]["running"]:
-            run_pi2(settings, stop_threads, stop_event)
+            run_pi2(settings, totalPersons, stop_threads, stop_event)
         if settings["PI3"]["running"]:
-            run_pi3(settings, stop_threads, stop_event)
+            run_pi3(settings, totalPersons, stop_threads, stop_event)
         
        
         while True:

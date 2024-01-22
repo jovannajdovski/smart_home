@@ -5,6 +5,7 @@ from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
 
+totalPersons=None
 
 def rgb_diode_callback(color, settings):      
     t = time.localtime()
@@ -24,7 +25,9 @@ def rgb_diode_callback(color, settings):
     
 
 
-def run_rgb_diode(settings, threads, stop_event):
+def run_rgb_diode(settings, _totalPersons, threads, stop_event):
+    global totalPersons
+    totalPersons=_totalPersons
     # threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.rgb_diode import run_rgb_diode_simulator

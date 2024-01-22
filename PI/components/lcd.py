@@ -5,7 +5,7 @@ import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
-
+totalPersons=None
 
 def lcd_callback(text, settings):      
     t = time.localtime()
@@ -24,7 +24,9 @@ def lcd_callback(text, settings):
         }
 
 
-def run_lcd(settings, threads, stop_event):
+def run_lcd(settings, _totalPersons, threads, stop_event):
+    global totalPersons
+    totalPersons=_totalPersons
     #print("jjj")
     # threads.append(publisher_thread)
     if settings['simulated']:

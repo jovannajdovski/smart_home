@@ -15,6 +15,7 @@ counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
 publisher_thread.daemon = True
 publisher_thread.start()
+totalPersons=None
 
 def ir_receiver_callback(command, settings):
     t = time.localtime()
@@ -41,8 +42,9 @@ def ir_receiver_callback(command, settings):
         publish_event.set()
 
 
-def run_ir_receiver(settings, threads, stop_event):
-
+def run_ir_receiver(settings, _totalPersons, threads, stop_event):
+    global totalPersons
+    totalPersons=_totalPersons
     threads.append(publisher_thread)
     if settings['simulated']:
         print(f"\nStarting {settings['id']} simulator\n")
