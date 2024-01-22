@@ -27,17 +27,21 @@ class Buzzer(object):
         for _ in range(alarm_duration//(buzz_duration*2)):
             self.buzz(buzz_duration)
             time.sleep(buzz_duration)
+    
+    def panic(self, buzz_duration, panic_duration):
+        for _ in range(panic_duration//(buzz_duration*2)):
+            self.buzz(buzz_duration)
 
 def run_buzzer_loop(buzzer, settings, delay, duration, callback, stop_event):
     while True:
         # :TODO add some logic
         rnd = random.random()
-        if rnd < 0.05:
-            buzzer.alarm(duration, 10*duration)
-            callback("ALARM", settings)
-        elif rnd < 0.1:
-            buzzer.buzz(duration)
-            callback("BUZZ", settings)
+        # if rnd < 0.05:
+        #     buzzer.alarm(duration, 10*duration)
+        #     callback("ALARM", settings)
+        # elif rnd < 0.1:
+        #     buzzer.buzz(duration)
+        #     callback("BUZZ", settings)
         if stop_event.is_set():
             GPIO.cleanup()
             break

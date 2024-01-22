@@ -19,6 +19,10 @@ def alarm():
     for _ in range(3):
         beep()
         time.sleep(1)
+    
+def panic():
+    for _ in range(10):
+        beep()
 
 def on_press(key, callback, settings):
     key = str(key).replace("'", "")

@@ -15,6 +15,7 @@ from components.led_diode import run_led_diode
 from components.ir_receiver import run_ir_receiver
 import time
 from utils.mqtt import connect
+from utils.alarm import Alarm
 
 try:
     import RPi.GPIO as GPIO
@@ -24,7 +25,7 @@ except:
 
 totalPersons=None
 
-def run_pi1(settings, totalPersons, threads, stop_event):
+def run_pi1(settings, totalPersons, alarm, threads, stop_event):
     rdht1_settings = settings['RDHT1']
     rdht2_settings = settings['RDHT2']
     dus1_settings = settings['DUS1']
@@ -36,16 +37,16 @@ def run_pi1(settings, totalPersons, threads, stop_event):
     dl_settings = settings['DL']
     dms_settings = settings['DMS']
 
-    run_dht(rdht1_settings, totalPersons, threads, stop_event)
-    run_dht(rdht2_settings, totalPersons, threads, stop_event)
-    run_uds(dus1_settings, totalPersons, threads, stop_event)
-    run_pir(dpir1_settings, totalPersons, threads, stop_event)
-    run_pir(rpir1_settings, totalPersons, threads, stop_event)
-    run_pir(rpir2_settings, totalPersons, threads, stop_event)
-    run_buzzer(db_settings, totalPersons, threads, stop_event)
+    # run_dht(rdht1_settings, totalPersons, threads, stop_event)
+    # run_dht(rdht2_settings, totalPersons, threads, stop_event)
+    # run_uds(dus1_settings, totalPersons, threads, stop_event)
+    # run_pir(dpir1_settings, totalPersons, threads, stop_event)
+    # run_pir(rpir1_settings, totalPersons, threads, stop_event)
+    # run_pir(rpir2_settings, totalPersons, threads, stop_event)
+    run_buzzer(db_settings, totalPersons, alarm, threads, stop_event)
     run_button(ds1_settings, totalPersons, threads, stop_event)
-    run_led_diode(dl_settings, totalPersons, threads, stop_event)
-    run_membrane_switch(dms_settings, totalPersons, threads, stop_event)
+    #run_led_diode(dl_settings, totalPersons, threads, stop_event)
+    # run_membrane_switch(dms_settings, totalPersons, threads, stop_event)
 
 def run_pi2(settings, totalPersons, threads, stop_event):
     ds2_settings = settings['DS2']
@@ -66,7 +67,7 @@ def run_pi2(settings, totalPersons, threads, stop_event):
     run_pir(rpir3_settings, totalPersons, threads, stop_event)
     run_dht(rdht3_settings, totalPersons, threads, stop_event) 
 
-def run_pi3(settings, totalPersons, threads, stop_event):
+def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     rpir4_settings = settings['RPIR4']
     rdht4_settings = settings['RDHT4']
     b4sd_settings = settings['B4SD']
@@ -79,7 +80,7 @@ def run_pi3(settings, totalPersons, threads, stop_event):
     run_dht(rdht4_settings, totalPersons, threads, stop_event) 
     run_4segment_display(b4sd_settings, totalPersons, threads, stop_event)
     run_rgb_diode(brgb_settings, totalPersons, threads, stop_event)
-    run_buzzer(bb_settings, totalPersons, threads, stop_event)
+    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event)
     run_pir(bir_settings, totalPersons, threads, stop_event)
     run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event)
 
@@ -89,14 +90,15 @@ if __name__ == "__main__":
     stop_event = threading.Event()
     totalPersons={'value':settings["totalPersons"], 'lock': threading.Lock()}
     try:
+        alarm = Alarm(pin="0123", active=False)
         if settings["PI1"]["running"]:
-            run_pi1(settings, totalPersons, stop_threads, stop_event)
+            run_pi1(settings, totalPersons, alarm, stop_threads, stop_event)
         if settings["PI2"]["running"]:
             run_pi2(settings, totalPersons, stop_threads, stop_event)
         if settings["PI3"]["running"]:
-            run_pi3(settings, totalPersons, stop_threads, stop_event)
+            run_pi3(settings, totalPersons, alarm, stop_threads, stop_event)
         
-       
+        
         while True:
             time.sleep(1)
 

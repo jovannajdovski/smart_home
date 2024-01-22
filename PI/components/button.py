@@ -17,7 +17,7 @@ publisher_thread = threading.Thread(target=publish_message, args=(publish_event,
 publisher_thread.daemon = True
 publisher_thread.start() 
 totalPersons=None
-last_released_time=None
+last_released_time={}
 
 def button_callback(settings):      
     t = time.localtime()
@@ -30,6 +30,7 @@ def button_callback(settings):
     time_now = datetime.now()
 
     if time_now-last_released_time[settings['id']]>timedelta(seconds=5):
+        print('drzi 5 sekundi')
         invoke_alarm()
     payload={
              'measurement': settings['type'],

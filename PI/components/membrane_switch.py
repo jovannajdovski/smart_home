@@ -1,10 +1,12 @@
 from simulators.membrane_switch import run_membrane_switch_simulator
 import threading
 import time
+from datetime import timedelta, datetime
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
+from components.buzzer import check_password
 
 batch = []
 publish_data_counter = Counter(0)
@@ -15,9 +17,11 @@ publisher_thread = threading.Thread(target=publish_message, args=(publish_event,
 publisher_thread.daemon = True
 publisher_thread.start()
 totalPersons=None
+last_four=[None, None, None, None]
+last_updated=None
 
 def membrane_switch_callback(key, settings):      
-    t = time.localtime()
+    t = datetime.now()
     # safe_print("\n"+"="*20,
     #             f"MEMBRANE SWITCH ID: {settings['id']}",
     #             f"Timestamp: {time.strftime('%H:%M:%S', t)}",
@@ -31,6 +35,20 @@ def membrane_switch_callback(key, settings):
              'id': settings['id'],
              'value': key
         }
+    global last_updated, last_four
+    
+    if last_updated is not None and t-last_updated>timedelta(seconds=10):
+        last_four=[None,None,None,None]
+    
+    last_updated=t
+    
+    
+    if None in last_four:
+        last_four=last_four[1:] + [key]
+    if None not in last_four:
+        check_password(''.join(last_four))
+        last_four=[None,None,None,None]
+    
     with counter_lock:
         batch.append((settings['type'], json.dumps(payload), 0, True))
         publish_data_counter.increment()

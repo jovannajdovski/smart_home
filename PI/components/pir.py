@@ -74,8 +74,12 @@ def count_persons(settings):
                         print('Total1 ++ ',totalPersons)
                 if last_distances['DUS1'][0]<last_distances['DUS1'][1]:
                     with totalPersons['lock']:
-                        totalPersons['value']-=1
-                        print('Total1 -- ',totalPersons)
+                        if totalPersons['value']>=1:
+                            totalPersons['value']-=1
+                            print('Total1 -- ',totalPersons)
+                        else:
+                            print('total=0, detected leaving')
+                            invoke_alarm()
     if settings['id']=='DPIR2':
             if 'DUS2' in last_distances and last_distances['DUS2'][0]!=None:
                 if last_distances['DUS2'][0]>last_distances['DUS2'][1]:
@@ -84,8 +88,12 @@ def count_persons(settings):
                         print('Total2 ++ ',totalPersons)
                 if last_distances['DUS2'][0]<last_distances['DUS2'][1]:
                     with totalPersons['lock']:
-                        totalPersons['value']-=1
-                        print('Total2 -- ',totalPersons)
+                        if totalPersons['value']>=1:
+                            totalPersons['value']-=1
+                            print('Total1 -- ',totalPersons)
+                        else:
+                            print('total=0, detected leaving')
+                            invoke_alarm()
 
 def check_motion(settings):
     with totalPersons['lock']:
