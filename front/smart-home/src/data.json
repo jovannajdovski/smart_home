@@ -1,0 +1,197 @@
+[
+    {
+        "id": 1,
+        "name": "PI 1",
+        "components": [
+            {
+                "id": 1,
+                "type": "Door sensor",
+                "name": "DS1",
+                "area": "Door",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 2,
+                "type": "Door light",
+                "name": "DL",
+                "area": "Door",
+                "active": false
+            },
+            {
+                "id": 3,
+                "type": "Ultrasonic sensor",
+                "name": "DUS1",
+                "area": "Door",
+                "lastDistance": 12.33
+            },
+            {
+                "id": 4,
+                "type": "Buzzer",
+                "name": "DB",
+                "area": "Door",
+                "active": false
+            },
+            {
+                "id": 5,
+                "type": "Motion sensor",
+                "name": "DPIR1",
+                "area": "Door",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 6,
+                "type": "Membrane switch",
+                "name": "DMS",
+                "area": "Door",
+                "code": "1234"
+            },
+            {
+                "id": 7,
+                "type": "Motion sensor",
+                "name": "RPIR1",
+                "area": "Room",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 8,
+                "type": "Motion sensor",
+                "name": "RPIR2",
+                "area": "Room",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 9,
+                "type": "DHT",
+                "name": "RDHT1",
+                "area": "Room",
+                "temperature": 22.44,
+                "humidity": 50
+            },
+            {
+                "id": 10,
+                "type": "DHT",
+                "name": "RDHT2",
+                "area": "Room",
+                "temperature": 22.44,
+                "humidity": 50
+            }
+            
+        ]
+    },
+    {
+        "id": 2,
+        "name": "PI 2",
+        "components": [
+            {
+                "id": 1,
+                "type": "Door sensor",
+                "name": "DS2",
+                "area": "Door",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 2,
+                "type": "Ultrasonic sensor",
+                "name": "DUS2",
+                "area": "Door",
+                "lastDistance": 12.33
+            },
+            {
+                "id": 3,
+                "type": "Motion sensor",
+                "name": "DPIR2",
+                "area": "Door",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 4,
+                "type": "DHT",
+                "name": "GDHT",
+                "area": "Garage",
+                "temperature": 22.44,
+                "humidity": 50
+            },
+            {
+                "id": 5,
+                "type": "LCD",
+                "name": "GLCD",
+                "area": "Garage",
+                "text": "temp = 22\nhumidity = 40"
+            },
+            {
+                "id": 6,
+                "type": "Gyro",
+                "name": "GSG",
+                "area": "Garage",
+                "rotation": 12.22,
+                "accelaration": 42.22
+            },
+            {
+                "id": 7,
+                "type": "Motion sensor",
+                "name": "RPIR3",
+                "area": "Room",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 8,
+                "type": "DHT",
+                "name": "RDHT3",
+                "area": "Room",
+                "temperature": 22.44,
+                "humidity": 50
+            }         
+        ]
+    },
+    {
+        "id": 3,
+        "name": "PI 3",
+        "components": [
+            {
+                "id": 1,
+                "type": "Motion sensor",
+                "name": "RPIR4",
+                "area": "Room",
+                "lastDetected": "12:22"
+            },
+            {
+                "id": 2,
+                "type": "DHT",
+                "name": "RDHT4",
+                "area": "Room",
+                "temperature": 22.44,
+                "humidity": 50
+            },
+            {
+                "id": 3,
+                "type": "Buzzer",
+                "name": "BB",
+                "area": "Bedroom",
+                "active": false
+            },
+            {
+                "id": 4,
+                "type": "4SD",
+                "name": "B4SD",
+                "area": "Bedroom",
+                "display": "22:44"
+            },
+            {
+                "id": 5,
+                "type": "Infrared",
+                "name": "BIR",
+                "area": "Bedroom",
+                "active": true,
+                "color": "red"
+            },
+            {
+                "id": 6,
+                "type": "RGB",
+                "name": "BRGB",
+                "area": "Bedroom",
+                "active": true,
+                "color": "red"
+            }       
+        ]
+    }
+]
