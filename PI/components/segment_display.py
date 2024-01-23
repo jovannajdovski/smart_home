@@ -7,13 +7,15 @@ from utils.mqtt import publish_message
 from utils.counter import Counter
 
 totalPersons=None
+alarm_clock_event = None
 
-def segment_display_callback(digit1, digit2, digit3, digit4, settings):      
+def segment_display_callback(digit1, digit2, digit3, digit4, settings, blink):      
     t = time.localtime()
     # safe_print("\n"+"="*20,
     #             f"4SEGMENT DISPLAY ID: {settings['id']}",
     #             f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-    #             f"DISPLAY: {digit1}{digit2}:{digit3}{digit4}"
+    #             f"DISPLAY: {digit1}{digit2}:{digit3}{digit4}",
+    #             f"CLOCK ALARM: {str(blink)}"
     #             )
     payload={
              'measurement': settings['type'],
@@ -26,14 +28,18 @@ def segment_display_callback(digit1, digit2, digit3, digit4, settings):
 
 
 
-def run_4segment_display(settings, _totalPersons, threads, stop_event):
+def run_4segment_display(settings, _totalPersons, threads, stop_event, _alarm_clock_event):
     global totalPersons
     totalPersons=_totalPersons
+
+    global alarm_clock_event
+    alarm_clock_event = _alarm_clock_event
+
     # threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.segment_display import run_4segment_simulator
         print(f"\nStarting {settings['id']} simulator\n")
-        segment_display_thread = threading.Thread(target = run_4segment_simulator, args=(settings, 5, segment_display_callback, stop_event))
+        segment_display_thread = threading.Thread(target = run_4segment_simulator, args=(settings, 1, segment_display_callback, stop_event, alarm_clock_event))
         segment_display_thread.start()
         threads.append(segment_display_thread)
         print(f"\n{settings['id']} simulator started\n")
@@ -44,7 +50,7 @@ def run_4segment_display(settings, _totalPersons, threads, stop_event):
                                           settings['seg_pin5'], settings['seg_pin6'], settings['seg_pin7'], settings['seg_pin8'],
                                           settings['dig_pin1'], settings['dig_pin2'], settings['dig_pin3'], settings['dig_pin4'],)
 
-        segment_display_thread = threading.Thread(target=display_time_on_segment_display, args=(segment_display, settings, 0.5, segment_display_callback, stop_event))
+        segment_display_thread = threading.Thread(target=display_time_on_segment_display, args=(segment_display, settings, 1, segment_display_callback, stop_event, alarm_clock_event))
         segment_display_thread.start()
         threads.append(segment_display_thread)
         print(f"\n{settings['id']} loop started\n")

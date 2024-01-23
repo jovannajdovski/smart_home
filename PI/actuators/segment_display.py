@@ -40,7 +40,7 @@ class SegmentDisplay(object):
             GPIO.setup(digit, GPIO.OUT)
             GPIO.output(digit, 1)
 
-    def display_time(self, s_time):
+    def display_time_old(self, s_time):
         for digit in range(4):
             for loop in range(0,7):
                 GPIO.output(self.segments[loop], num[s_time[digit]][loop])
@@ -53,19 +53,47 @@ class SegmentDisplay(object):
             GPIO.output(self.digits[digit], 1)
 
 
+    def display_time(self, s_time, alarm):
+        for digit in range(4):
+            for loop in range(0,7):
+                GPIO.output(self.segments[loop], num[s_time[digit]][loop])
+                if (int(time.ctime()[18:19])%2 == 0) and (digit == 1):
+                    GPIO.output(25, 1)
+                else:
+                    GPIO.output(25, 0)
+            
+            GPIO.output(self.digits[digit], 0)
+
+        display_duration = 0.5   
+        if alarm:
+            time.sleep(display_duration)
+
+        for digit in range(4):
+            time.sleep(0.001)
+            GPIO.output(self.digits[digit], 1)
+
+        if alarm:
+            time.sleep(display_duration)
+
+
     def cleanup(self):
         GPIO.cleanup()
     
     
 
 
-def display_time_on_segment_display(display, settings, delay, callback, stop_event):
-    
+def display_time_on_segment_display(display, settings, delay, callback, stop_event, alarm_clock_event):
+    blink = False
     while not stop_event.is_set():
         n = time.ctime()[11:13]+time.ctime()[14:16]
         s = str(n).rjust(4)
 
-        display.display_time(s)
+        if alarm_clock_event.is_set():
+            display.display_time(s, alarm=True)
+            blink = True
+        else:
+            display.display_time(s, alarm=False)
+            blink = False
 
-        callback(s[0], s[1], s[2], s[3], settings)
+        callback(s[0], s[1], s[2], s[3], settings, blink=blink)
         time.sleep(delay)

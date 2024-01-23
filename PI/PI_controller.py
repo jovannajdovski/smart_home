@@ -16,6 +16,7 @@ from components.ir_receiver import run_ir_receiver
 import time
 from utils.mqtt import connect
 from utils.alarm import Alarm
+from utils.clock_alarm import run_clock_alarm
 
 try:
     import RPi.GPIO as GPIO
@@ -68,6 +69,11 @@ def run_pi2(settings, totalPersons, threads, stop_event):
     # run_dht(rdht3_settings, totalPersons, threads, stop_event) 
 
 def run_pi3(settings, totalPersons, alarm, threads, stop_event):
+
+    clock_alarm_settings = settings["clockAlarm"]
+    _alarm_clock_event = threading.Event()
+    run_clock_alarm(clock_alarm_settings, threads, stop_event, _alarm_clock_event)
+
     rpir4_settings = settings['RPIR4']
     rdht4_settings = settings['RDHT4']
     b4sd_settings = settings['B4SD']
@@ -76,19 +82,20 @@ def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     bir_settings = settings['BIR']
     ir_receiver_settings = settings['BREC']
 
-    run_pir(rpir4_settings, totalPersons, threads, stop_event)
-    run_dht(rdht4_settings, totalPersons, threads, stop_event) 
-    run_4segment_display(b4sd_settings, totalPersons, threads, stop_event)
-    run_rgb_diode(brgb_settings, totalPersons, threads, stop_event)
-    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event)
-    run_pir(bir_settings, totalPersons, threads, stop_event)
-    run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event)
+    # run_pir(rpir4_settings, totalPersons, threads, stop_event)
+    # run_dht(rdht4_settings, totalPersons, threads, stop_event) 
+    run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
+    # run_rgb_diode(brgb_settings, totalPersons, threads, stop_event)
+    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
+    # run_pir(bir_settings, totalPersons, threads, stop_event)
+    # run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event)
 
 if __name__ == "__main__":
     settings = load_settings()
     stop_threads = []
     stop_event = threading.Event()
     totalPersons={'value':settings["totalPersons"], 'lock': threading.Lock()}
+
     try:
         alarm = Alarm(pin="0123", active=False)
         if settings["PI1"]["running"]:

@@ -1,15 +1,19 @@
 {
+    "clockAlarm": {
+        "time": "21:40",
+        "active": true
+    },
     "totalPersons":5,
     "PI1": {
-        "running": true,
+        "running": false,
         "simulated": true
     },
     "PI2": {
-        "running": true,
+        "running": false,
         "simulated": true
     },
     "PI3": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "RDHT1": {
