@@ -37,15 +37,15 @@ def run_pi1(settings, totalPersons, alarm, threads, stop_event):
     dl_settings = settings['DL']
     dms_settings = settings['DMS']
 
-    # run_dht(rdht1_settings, totalPersons, threads, stop_event)
-    # run_dht(rdht2_settings, totalPersons, threads, stop_event)
-    # run_uds(dus1_settings, totalPersons, threads, stop_event)
-    # run_pir(dpir1_settings, totalPersons, threads, stop_event)
-    # run_pir(rpir1_settings, totalPersons, threads, stop_event)
-    # run_pir(rpir2_settings, totalPersons, threads, stop_event)
+    run_dht(rdht1_settings, totalPersons, threads, stop_event)
+    run_dht(rdht2_settings, totalPersons, threads, stop_event)
+    run_uds(dus1_settings, totalPersons, threads, stop_event)
+    run_pir(dpir1_settings, totalPersons, threads, stop_event)
+    run_pir(rpir1_settings, totalPersons, threads, stop_event)
+    run_pir(rpir2_settings, totalPersons, threads, stop_event)
     run_buzzer(db_settings, totalPersons, alarm, threads, stop_event)
-    # run_button(ds1_settings, totalPersons, threads, stop_event)
-    # run_led_diode(dl_settings, totalPersons, threads, stop_event)
+    run_button(ds1_settings, totalPersons, threads, stop_event)
+    run_led_diode(dl_settings, totalPersons, threads, stop_event)
     run_membrane_switch(dms_settings, totalPersons, threads, stop_event)
 
 def run_pi2(settings, totalPersons, threads, stop_event):

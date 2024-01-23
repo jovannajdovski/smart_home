@@ -1,11 +1,11 @@
 <script lang="ts">
-    export let sensor: { id:number; type: string; name: string; area: string; lastDetected: string;};
+    export let sensor: { id:string; type: string; measurement: string; area: string; value: string|undefined; time: string|undefined; pi:number};
 </script>
 
 <div class="card">
-    <h1>{sensor.type} {sensor.name}</h1>
+    <h1>{sensor.type} {sensor.id}</h1>
     <p>Area {sensor.area}</p>
-    <p>Last detected {sensor.lastDetected}</p>
+    <p>Last detected {sensor.time}</p>
 </div>
     
 <style>

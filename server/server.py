@@ -1,13 +1,17 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
 import json
 from datetime import datetime
+import json
+import os
+
 
 
 app = Flask(__name__)
-
+CORS(app)
 
 # InfluxDB Configuration
 token = "qHBkZB-YWpO0OqRrPd9VMDBv-EaTMZBGahrrkxVVB6OjCa4k3cztG5snU5AiWUBucjie1KKFsMCw3yqtVckRvg=="
@@ -57,7 +61,12 @@ def save_alarm_to_db(data):
         .field("measurement", data["value"])
         .time(data['time'])
     )
-    write_api.write(bucket=bucket, org=org, record=point)
+    try:
+        write_api.write(bucket=bucket, org=org, record=point)
+    except Exception as e:
+        print("Exception when writing to InfluxDB: %s\n" % e)
+        print("Response body:", e.body)
+        print("Response headers:", e.headers)
 
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -80,8 +89,104 @@ def save_to_db(data):
     else:
         # If 'value' is not a list, add a single field
         point = point.field("measurement", value)
-    write_api.write(bucket=bucket, org=org, record=point)
+    try:
+        write_api.write(bucket=bucket, org=org, record=point)
+    except Exception as e:
+        print("Exception when writing to InfluxDB: %s\n" % e)
+        print("Response body:", e.body)
+        print("Response headers:", e.headers)
 
+def generate_query(measurement):
+    query = f'from(bucket: "iot_db") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "{measurement}") |> yield(name: "last")'
+    return query.format(bucket)
+
+def generate_query_with_id(measurement, id):
+    query = f'from(bucket: "iot_db") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["id"] == "{id}") |> filter(fn: (r) => r["_measurement"] == "{measurement}") |> yield(name: "last")'
+    return query.format(bucket)
+
+@app.route('/get_all', methods=['GET'])
+def get_all():
+    settings=load_settings()
+    response_list=[]
+    measurements_pairs = [("ALARM","ALARM"), ("4DD","B4SD"),("LIGHT", "DL"),("RGB-LIGHT", "BRGB"), ("Acceleration","GSG"), ("LCD","GLCD"), ("Rotation","GSG")]
+    measurements_pairs_with_id=[("PIR", "DPIR1"),("PIR", "DPIR2"),("PIR", "RPIR1"),("PIR", "RPIR2"),("PIR", "RPIR3"),("PIR", "RPIR4"),
+            ("BUTTON","DS1"), ("BUTTON","DS2"),("BUZZER","DB"), ("BUZZER","BB"),
+            ("US", "DUS1"),("US", "DUS2"), 
+            ("Temperature", "GDHT"),("Humidity", "GDHT"),("Temperature", "RDHT1"),("Humidity", "RDHT1"),
+            ("Temperature", "RDHT2"),("Humidity", "RDHT2"),("Temperature", "RDHT3"),("Humidity", "RDHT3"),
+            ("Temperature", "RDHT4"),("Humidity", "RDHT4") ]
+    last_acceleration_values=[]
+    for measurement, id in measurements_pairs:
+        result = influxdb_client.query_api().query(org=org, query=generate_query(measurement))
+        if measurement =='ALARM':
+            if len(result)>0 and len(result[0].records)>0:
+                record=result[0].records[-1]
+                response_list.append({'measurement': record.get_measurement(), 'time': record.get_time(), 'value': record.get_value(), 'id': id, 'pi':-1})
+            else:
+                response_list.append({'measurement': measurement, 'time': None, 'value': None, 'id': id, 'pi':-1})
+        elif measurement == 'Acceleration':
+            time=None
+            values=[]
+            field=None
+            if len(result)>0 and len(result[0].records)>0:
+                for table in result:
+                    record=table.records[-1]
+                    field=record.get_measurement()
+                    time=record.get_time()
+                    last_acceleration_values.append(record.get_value())
+        elif measurement == 'Rotation':
+            time=None
+            values=[]
+            field=None
+            if len(result)>0 and len(result[0].records)>0:
+                for table in result:
+                    record=table.records[-1]
+                    field=record.get_measurement()
+                    time=record.get_time()
+                    values.append(record.get_value())
+                response_list.append({'measurement': field, 'time': time, 'value': [last_acceleration_values,values], 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+            else:
+                response_list.append({'measurement': measurement, 'time': None, 'value':[last_acceleration_values, []], 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+            last_acceleration_values=[]
+        else:
+            if len(result)>0 and len(result[0].records)>0:
+                record=result[0].records[-1]
+                response_list.append({'measurement': record.get_measurement(), 'time': record.get_time(), 'value': record.get_value(), 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+            else:
+                response_list.append({'measurement': measurement, 'time': None, 'value': None, 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+    last_temperature_value=None
+    for measurement, id in measurements_pairs_with_id:
+        result = influxdb_client.query_api().query(org=org, query=generate_query_with_id(measurement, id))
+        if measurement=='Temperature':
+            if len(result)>0 and len(result[0].records)>0:
+                last_temperature_value=result[0].records[-1].get_value()
+        elif measurement=='Humidity':
+            if len(result)>0 and len(result[0].records)>0:
+                record=result[0].records[-1]
+                response_list.append({'measurement': 'DHT', 'time': record.get_time(), 'value': [last_temperature_value,record.get_value()], 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+            else:
+                response_list.append({'measurement': 'DHT', 'time': None, 'value': [last_temperature_value,None], 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+            last_temperature_value=None
+        else:
+            if len(result)>0 and len(result[0].records)>0:
+                record=result[0].records[-1]
+                response_list.append({'measurement': record.get_measurement(), 'time': record.get_time(), 'value': record.get_value(), 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+            else:
+                response_list.append({'measurement': measurement, 'time': None, 'value': None, 'id': id, 'area': settings[id]['area'], 'type': settings[id]['type'], 'pi': settings[id]['connectedToPi']})
+           
+        # print(f"Result for {measurement}: {result}")
+
+    # last_record=result_alarm[0].records[-1]
+    # measurement = last_record.get_value()
+    # time = last_record.get_time()
+    # value = last_record.get_measurement()
+    
+    # response = {
+    #     'measurement': measurement,
+    #     'time': time,
+    #     'value': value
+    # }
+    return jsonify(response_list)
 
 # Route to store dummy data
 @app.route('/store_data', methods=['POST'])
@@ -124,5 +229,17 @@ def retrieve_aggregate_data():
 def test_endpoint():
     return "rerna"
 
+
+def load_settings(filePath='../config/settings.json'):
+    script_dir = os.path.dirname(__file__)
+    
+    # Create the absolute path to the settings.json file
+    absolute_path = os.path.join(script_dir, filePath)
+    
+    with open(absolute_path, 'r') as f:
+        return json.load(f)
+
 if __name__ == '__main__':
     app.run(debug=False)
+
+

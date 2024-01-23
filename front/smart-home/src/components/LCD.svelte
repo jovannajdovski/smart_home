@@ -1,11 +1,11 @@
 <script lang="ts">
-    export let display: { id:number; type: string; name: string; area: string; text: string;};
+    export let display: { id:string; type: string; measurement: string; area: string; value: string|undefined; time: string|undefined; pi:number};;
 </script>
 
 <div class="card">
-    <h1>LCD {display.name}</h1>
+    <h1>LCD {display.id}</h1>
     <p>Area {display.area}</p>
-    <p>{display.text}</p>
+    <p>{display.value}</p>
 </div>
     
 <style>

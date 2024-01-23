@@ -1,12 +1,12 @@
 <script lang="ts">
-    export let sensor: { id:number; type: string; name: string; area: string; temperature: number; humidity: number;};
+    export let sensor: { id:string; type: string; measurement: string; area: string; value: (number|undefined)[]; time: string|undefined; pi:number};
 </script>
 
 <div class="card">
-    <h1>{sensor.type} {sensor.name}</h1>
+    <h1>{sensor.type} {sensor.id}</h1>
     <p>Area {sensor.area}</p>
-    <p>Temperature {sensor.temperature}</p>
-    <p>Humidity {sensor.humidity}</p>
+    <p>Temperature {sensor.value[0]}</p>
+    <p>Humidity {sensor.value[1]}</p>
 </div>
     
 <style>

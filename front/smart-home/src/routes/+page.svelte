@@ -1,6 +1,6 @@
 <script lang="ts">
     import axios from "axios";
-    import { onMount } from "svelte";
+    import { beforeUpdate, onMount } from "svelte";
     import Buzzer from "../components/Buzzer.svelte";
     import DoorSensor from "../components/DoorSensor.svelte";
     import FSD from "../components/FSD.svelte";
@@ -15,48 +15,62 @@
     import Rgb from "../components/RGB.svelte";
 
     // :TODO load pis object
-    import pis from "../data.json";
+    // import pis from "../data.json";
 
     // let pis: {
     //     id: number;
     //     alt_description: string;
     // }[] = [];
-
+    let pis=[1,2,3]
     let selectedPiIdx = 1;
     let selectedPi: any;
 
-    // const fetchData = async () => {
-    //     const response = await axios.get(
-    //         `http://api.unsplash.com/search/photos?page=1&query=${
-    //             term || "office"
-    //         }&client_id=PQyLgjK4KgjRI9GVsFTK0HGB-uFZQC_eEsghofjcr1E`,
-    //     );
-    //     photos = response.data.results;
-    // };
+    let data= [{}];
+
+    const fetchData = async () => {
+        try {
+        const response = await fetch('http://localhost:5000/get_all');
+        if (response.ok) {
+            data = await response.json();
+        } else {
+            console.error('Failed to fetch data:', response.statusText);
+        }
+        } catch (error) {
+        console.error('Error:', error);
+        }
+    };
+
+    let intervalId: number | undefined;
+    
+    // beforeUpdate(() => {
+    //     clearInterval(intervalId);
+    // });
 
     onMount(() => {
-        //fetchData();
-        // pis = [{id:1, alt_description:"PI1"},
-        // {id:2, alt_description:"PI2"},
-        // {id:3, alt_description:"PI3"}]
+        fetchData();
+        intervalId  = setInterval(fetchData, 5000);
+        return () => clearInterval(intervalId);
     });
 
-    $: selectedPi = pis.find((pi) => pi.id === selectedPiIdx);
+    // $: selectedPi = pis.find((pi) => pi.id === selectedPiIdx);
 
     const toPi = (idx: number) => {
         selectedPiIdx = idx;
     };
 
-    let alarm = "INACTIVE";
+    let alarm="INACTIVE";
+    $: {
+        alarm = data[0].value?.toUpperCase() ?? "INACTIVE";
+    }
 
     const turnAlarm = () => {
-        if (alarm === "INACTIVE") {
-            alarm = "ACTIVE";
-        } else if (alarm === "ACTIVE") {
-            alarm = "PANIC";
-        } else if (alarm === "PANIC") {
-            alarm = "INACTIVE";
-        }
+        // if (alarm === "INACTIVE") {
+        //     alarm = "ACTIVE";
+        // } else if (alarm === "ACTIVE") {
+        //     alarm = "PANIC";
+        // } else if (alarm === "PANIC") {
+        //     alarm = "INACTIVE";
+        // }
     };
 </script>
 
@@ -65,12 +79,12 @@
         <div class="nav">
             <h1>SMART HOME</h1>
             <div class="button-container">
-                {#each pis as pi, i (pi.id)}
+                {#each pis as piId}
                     <button
                         class={`button ${
-                            pi.id === selectedPiIdx ? "btn-act" : "btn-inact"
+                            piId === selectedPiIdx ? "btn-act" : "btn-inact"
                         }`}
-                        on:click={() => toPi(pi.id)}>PI {pi.id}</button
+                        on:click={() => toPi(piId)}>PI {piId}</button
                     >
                 {/each}
             </div>
@@ -85,33 +99,35 @@
 
     <div class="pi-container">
         <div class="pi-components">
-            {#each selectedPi.components as component}
-                {#if component.type === "Buzzer"}
-                    <Buzzer buzzer={component} />
-                {:else if component.type === "DHT"}
-                    <Dht sensor={component} />
-                {:else if component.type === "Door light"}
-                    <DoorLight light={component} />
-                {:else if component.type === "Door sensor"}
-                    <DoorSensor sensor={component} />
-                {:else if component.type === "4SD"}
-                    <FSD display={component} />
-                {:else if component.type === "Gyro"}
-                    <Gyro sensor={component} />
-                {:else if component.type === "Infrared"}
-                    <Infrared infrared={component} />
-                {:else if component.type === "LCD"}
-                    <LCD display={component} />
-                {:else if component.type === "Membrane switch"}
-                    <MembraneSwitch keypad={component} />
-                {:else if component.type === "Motion sensor"}
-                    <MotionSensor sensor={component} />
-                {:else if component.type === "RGB"}
-                    <Rgb rgb={component} />
-                {:else if component.type === "Ultrasonic sensor"}
-                    <UltrasonicSensor sensor={component} />
-                {:else}
-                    <div class="bg-gray-200 w-10 h-10 rounded-full m-3" />
+            {#each data as component}
+                {#if component.pi === selectedPiIdx}
+                    {#if component.type === "BUZZER"}            
+                        <Buzzer buzzer={component} />
+                    {:else if component.type === "DHT"}          
+                        <Dht sensor={component} />
+                    {:else if component.type === "LIGHT"}         
+                        <DoorLight light={component} />
+                    {:else if component.type === "BUTTON"}       
+                        <DoorSensor sensor={component} />
+                    {:else if component.type === "4DD"}            
+                        <FSD display={component} />
+                    {:else if component.type === "GYRO"}        
+                        <Gyro sensor={component} />
+                    {:else if component.type === "IR-RECEIVER"} <!-- TODO -->
+                        <Infrared infrared={component} />
+                    {:else if component.type === "LCD"}          
+                        <LCD display={component} />
+                    {:else if component.type === "MS"}           <!-- TODO -->
+                        <MembraneSwitch keypad={component} />
+                    {:else if component.type === "PIR"}
+                        <MotionSensor sensor={component} />
+                    {:else if component.type === "RGB-LIGHT"}  
+                        <Rgb rgb={component} />
+                    {:else if component.type === "US"}         
+                        <UltrasonicSensor sensor={component} />
+                    {:else}
+                        <div class="bg-gray-200 w-10 h-10 rounded-full m-3" />
+                    {/if}
                 {/if}
             {/each}
         </div>

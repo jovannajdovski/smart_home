@@ -12,13 +12,13 @@ RESET = "\033[0m"
 def on_press(key, callback, settings):
     key = str(key).replace("'", "")
     if key == "r":
-        callback(RED + "red" + RESET, settings)
+        callback("red", settings)
     elif key == "b":
-        callback(BLUE + "blue" + RESET, settings) 
+        callback("blue", settings) 
     elif key == "g":
-        callback(GREEN + "green" + RESET, settings) 
+        callback("green", settings) 
     elif key == "w":
-        callback(WHITE + "white" + RESET, settings)
+        callback("white", settings)
     elif key == "o":
         callback("off", settings)
 

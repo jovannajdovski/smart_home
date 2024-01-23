@@ -1,11 +1,11 @@
 <script lang="ts">
-    export let light: { id:number; type: string; name: string; area: string; active: boolean;};
+    export let light: { id:string; type: string; measurement: string; area: string; value: string|undefined; time: string|undefined; pi:number};
 </script>
 
 <div class="card">
-    <h1>{light.type} {light.name}</h1>
+    <h1>{light.type} {light.id}</h1>
     <p>Area {light.area}</p>
-    <p>{`${light.active ? "ON" : "OFF"}`}</p>
+    <p>{light.value} from {light.time} </p>
 </div>
     
 <style>

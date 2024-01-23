@@ -1,38 +1,31 @@
 <script lang="ts">
-    export let rgb: {
-        id: number;
-        type: string;
-        name: string;
-        area: string;
-        active: boolean;
-        color: string;
-    };
+    export let rgb: { id:string; type: string; measurement: string; area: string; value: string|undefined; time: string|undefined; pi:number};
 
 </script>
 
 <div class="card">
-    <h1>{rgb.type} {rgb.name}</h1>
+    <h1>{rgb.type} {rgb.id}</h1>
     <p>Area {rgb.area}</p>
 
     <div class="color-picker">
         <div
             class={`${
-                !rgb.active
+                rgb.value === "off"
                     ? "bg-gray-600"
                     : null
             } 
             ${
-                rgb.active && rgb.color === "red"
+                rgb.value === "red"
                     ? "bg-red-600"
                     : null
             }
             ${
-                rgb.active && rgb.color === "green"
+                rgb.value === "green"
                     ? "bg-green-600"
                     : null
             }
             ${
-                rgb.active && rgb.color === "blue"
+                rgb.value === "blue"
                     ? "bg-blue-600"
                     : null
             }
