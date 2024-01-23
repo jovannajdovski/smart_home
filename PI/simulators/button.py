@@ -10,15 +10,11 @@ def generate_values(probability=0.2):
             yield False
 
 def generate_values_pressing_five_seconds(probability=0.2):
-    for i in range(25):
-        if(i<7):
+    for i in range(7):
+        if(i<3):
             yield True
-        elif(i==13):
-            yield True
-        elif(i<19):
-            yield False
         else:
-            yield True
+            yield False
         time.sleep(1)
 
 

@@ -2,6 +2,7 @@ from simulators.pir import run_pir_simulator
 import threading
 import time
 import json
+from datetime import datetime
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
@@ -34,7 +35,8 @@ def pir_callback(motion_detected, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': 'DETECTED'
+             'value': 'DETECTED',
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
         with counter_lock:
             batch.append((settings['type'], json.dumps(payload), 0, True))
@@ -71,28 +73,22 @@ def count_persons(settings):
                 if last_distances['DUS1'][0]>last_distances['DUS1'][1]:
                     with totalPersons['lock']:
                         totalPersons['value']+=1
-                        print('Total1 ++ ',totalPersons)
                 if last_distances['DUS1'][0]<last_distances['DUS1'][1]:
                     with totalPersons['lock']:
                         if totalPersons['value']>=1:
                             totalPersons['value']-=1
-                            print('Total1 -- ',totalPersons)
                         else:
-                            print('total=0, detected leaving')
                             invoke_alarm()
     if settings['id']=='DPIR2':
             if 'DUS2' in last_distances and last_distances['DUS2'][0]!=None:
                 if last_distances['DUS2'][0]>last_distances['DUS2'][1]:
                     with totalPersons['lock']:
                         totalPersons['value']+=1
-                        print('Total2 ++ ',totalPersons)
                 if last_distances['DUS2'][0]<last_distances['DUS2'][1]:
                     with totalPersons['lock']:
                         if totalPersons['value']>=1:
                             totalPersons['value']-=1
-                            print('Total1 -- ',totalPersons)
                         else:
-                            print('total=0, detected leaving')
                             invoke_alarm()
 
 def check_motion(settings):

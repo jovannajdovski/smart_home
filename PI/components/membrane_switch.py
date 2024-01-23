@@ -33,7 +33,8 @@ def membrane_switch_callback(key, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': key
+             'value': key,
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     global last_updated, last_four
     

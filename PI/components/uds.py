@@ -1,6 +1,7 @@
 from simulators.uds import run_uds_simulator
 import threading
 import time
+from datetime import datetime
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
@@ -39,7 +40,8 @@ def uds_callback(distance, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': float(distance)
+             'value': float(distance),
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
         with counter_lock:
             batch.append((settings['type'], json.dumps(payload), 0, True))

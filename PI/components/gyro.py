@@ -2,6 +2,7 @@
 from simulators.gyro import run_gyro_simulator
 import threading
 import time
+from datetime import datetime
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
@@ -44,7 +45,8 @@ def gyro_callback(accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': [float(accel_x),float(accel_y),float(accel_z)]
+             'value': [float(accel_x),float(accel_y),float(accel_z)],
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     rotation_payload={
              'measurement': 'Rotation',
@@ -52,7 +54,8 @@ def gyro_callback(accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': [float(gyro_x), float(gyro_y), float(gyro_z)]
+             'value': [float(gyro_x), float(gyro_y), float(gyro_z)],
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     with counter_lock:
         batch.append((settings['type'], json.dumps(acceleration_payload), 0, True))

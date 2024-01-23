@@ -2,6 +2,7 @@
 from simulators.dht import run_dht_simulator
 import threading
 import time
+from datetime import datetime
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
@@ -32,7 +33,8 @@ def dht_callback(humidity, temperature, code, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': float(humidity)
+             'value': float(humidity),
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     temperature_payload={
              'measurement': 'Temperature',
@@ -40,7 +42,8 @@ def dht_callback(humidity, temperature, code, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': float(temperature)
+             'value': float(temperature),
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     with counter_lock:
         

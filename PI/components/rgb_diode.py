@@ -1,10 +1,20 @@
 
 import threading
+import json
 import time
+from datetime import datetime
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
 
+batch = []
+publish_data_counter = Counter(0)
+publish_data_limit = 5
+publish_event=threading.Event()
+counter_lock = threading.Lock()
+publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
+publisher_thread.daemon = True
+publisher_thread.start()
 totalPersons=None
 
 def rgb_diode_callback(color, settings):      
@@ -20,15 +30,21 @@ def rgb_diode_callback(color, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': color
+             'value': color,
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
+    with counter_lock:
+        batch.append((settings['type'], json.dumps(payload), 0, True))
+        publish_data_counter.increment()
+    if publish_data_counter.value>=publish_data_limit:
+        publish_event.set()
     
 
 
 def run_rgb_diode(settings, _totalPersons, threads, stop_event):
     global totalPersons
     totalPersons=_totalPersons
-    # threads.append(publisher_thread)
+    threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.rgb_diode import run_rgb_diode_simulator
         print(f"\nStarting {settings['id']} simulator\n")

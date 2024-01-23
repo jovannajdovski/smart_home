@@ -2,6 +2,7 @@
 from simulators.ir_receiver import run_ir_receiver_simulator
 import threading
 import time
+from datetime import datetime
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
@@ -32,7 +33,8 @@ def ir_receiver_callback(command, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': command
+             'value': command,
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
 
     with counter_lock:       

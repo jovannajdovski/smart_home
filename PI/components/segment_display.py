@@ -1,11 +1,20 @@
 
 import threading
 import time
+from datetime import datetime
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
 
+batch = []
+publish_data_counter = Counter(0)
+publish_data_limit = 5
+publish_event=threading.Event()
+counter_lock = threading.Lock()
+publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
+publisher_thread.daemon = True
+publisher_thread.start()
 totalPersons=None
 
 def segment_display_callback(digit1, digit2, digit3, digit4, settings):      
@@ -21,15 +30,22 @@ def segment_display_callback(digit1, digit2, digit3, digit4, settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': f"{digit1}{digit2}:{digit3}{digit4}"
+             'value': f"{digit1}{digit2}:{digit3}{digit4}",
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
+    with counter_lock:
+        batch.append((settings['type'], json.dumps(payload), 0, True))
+        publish_data_counter.increment()
+    if publish_data_counter.value>=publish_data_limit:
+        publish_event.set()
+    
 
 
 
 def run_4segment_display(settings, _totalPersons, threads, stop_event):
     global totalPersons
     totalPersons=_totalPersons
-    # threads.append(publisher_thread)
+    threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.segment_display import run_4segment_simulator
         print(f"\nStarting {settings['id']} simulator\n")

@@ -21,7 +21,6 @@ influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 mqtt_client = mqtt.Client()
 
 def on_connect(client, userdata, flags, rc):
-    print('CONNECT')
     client.subscribe("BUTTON")
     client.subscribe("LIGHT") #actuator
     client.subscribe("US")
@@ -33,27 +32,43 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("LCD") #actuator
     client.subscribe("4DD") #actuator
     client.subscribe("RGB-LIGHT") #actuator
+    client.subscribe("ALARM")
 
 
 def on_message(client, userdata, msg):
     print(f"Rec. TOPIC \t: {msg.topic}")
+    
     data = json.loads(msg.payload.decode('utf-8'))
-    save_to_db(data)
+    if msg.topic=="ALARM":
+        save_alarm_to_db(data)
+    else:
+        save_to_db(data)
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
+def save_alarm_to_db(data):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+
+    point = (
+        Point(data["measurement"])
+        .field("measurement", data["value"])
+        .time(data['time'])
+    )
+    write_api.write(bucket=bucket, org=org, record=point)
+
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    
     point = (
         Point(data["measurement"])
         .tag("simulated", data["simulated"])
         .tag("runs_on", data["connectedToPi"])
         .tag("name", data["name"])
         .tag("id",data['id'])
-        .time(datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'))
+        .time(data['time'])
     )
     measurement=data["measurement"]
     value=data["value"]

@@ -28,7 +28,6 @@ def button_callback(settings):
     #             )
     global last_released_time
     time_now = datetime.now()
-
     if time_now-last_released_time[settings['id']]>timedelta(seconds=5):
         print('drzi 5 sekundi')
         invoke_alarm()
@@ -38,7 +37,8 @@ def button_callback(settings):
              'connectedToPi': settings['connectedToPi'],
              'name': settings['name'],
              'id': settings['id'],
-             'value': 'PRESSED'
+             'value': 'PRESSED',
+             'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     with counter_lock:
         batch.append((settings['type'], json.dumps(payload), 0, True))
