@@ -40,12 +40,12 @@ def run_pi1(settings, totalPersons, alarm, threads, stop_event):
     # run_dht(rdht1_settings, totalPersons, threads, stop_event)
     # run_dht(rdht2_settings, totalPersons, threads, stop_event)
     # run_uds(dus1_settings, totalPersons, threads, stop_event)
-    # run_pir(dpir1_settings, totalPersons, threads, stop_event)
+    run_pir(dpir1_settings, totalPersons, threads, stop_event)
     # run_pir(rpir1_settings, totalPersons, threads, stop_event)
     # run_pir(rpir2_settings, totalPersons, threads, stop_event)
-    run_buzzer(db_settings, totalPersons, alarm, threads, stop_event)
-    run_button(ds1_settings, totalPersons, threads, stop_event)
-    #run_led_diode(dl_settings, totalPersons, threads, stop_event)
+    # run_buzzer(db_settings, totalPersons, alarm, threads, stop_event)
+    # run_button(ds1_settings, totalPersons, threads, stop_event)
+    run_led_diode(dl_settings, totalPersons, threads, stop_event)
     # run_membrane_switch(dms_settings, totalPersons, threads, stop_event)
 
 def run_pi2(settings, totalPersons, threads, stop_event):
@@ -58,14 +58,14 @@ def run_pi2(settings, totalPersons, threads, stop_event):
     rpir3_settings = settings['RPIR3']
     rdht3_settings = settings['RDHT3']
 
-    run_button(ds2_settings, totalPersons, threads, stop_event)
-    run_uds(dus2_settings, totalPersons, threads, stop_event)
-    run_pir(dpir2_settings, totalPersons, threads, stop_event)
+    # run_button(ds2_settings, totalPersons, threads, stop_event)
+    # run_uds(dus2_settings, totalPersons, threads, stop_event)
+    # run_pir(dpir2_settings, totalPersons, threads, stop_event)
     run_dht(gdht_settings, totalPersons, threads, stop_event)
-    run_gyro(gsg_settings, totalPersons, threads, stop_event)
+    # run_gyro(gsg_settings, totalPersons, threads, stop_event)
     run_lcd(glcd_settings, totalPersons, threads, stop_event)
-    run_pir(rpir3_settings, totalPersons, threads, stop_event)
-    run_dht(rdht3_settings, totalPersons, threads, stop_event) 
+    # run_pir(rpir3_settings, totalPersons, threads, stop_event)
+    # run_dht(rdht3_settings, totalPersons, threads, stop_event) 
 
 def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     rpir4_settings = settings['RPIR4']

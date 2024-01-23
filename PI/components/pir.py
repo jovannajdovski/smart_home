@@ -7,6 +7,7 @@ from utils.mqtt import publish_message
 from utils.counter import Counter
 from components.uds import last_distances
 from components.buzzer import invoke_alarm
+from components.led_diode import turn_led_diode_for_10sec
 
 batch = []
 publish_data_counter = Counter(0)
@@ -28,6 +29,7 @@ def pir_callback(motion_detected, settings):
         #            )
         count_persons(settings)
         check_motion(settings)
+        check_motion_for_light(settings)
         payload={
              'measurement': settings['type'],
              'simulated': settings['simulated'],
@@ -99,3 +101,7 @@ def check_motion(settings):
     with totalPersons['lock']:
         if totalPersons['value']==0 and settings['id'] in ['RPIR1','RPIR2','RPIR3','RPIR4']:
             invoke_alarm()
+
+def check_motion_for_light(settings):
+    if settings['id'] == 'DPIR1':
+        turn_led_diode_for_10sec()
