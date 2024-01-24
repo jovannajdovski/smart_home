@@ -79,16 +79,19 @@ def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     b4sd_settings = settings['B4SD']
     brgb_settings = settings['BRGB']
     bb_settings = settings['BB']
-    bir_settings = settings['BIR']
-    ir_receiver_settings = settings['BREC']
+    ir_receiver_settings = settings['BIR']
+
+    rgb_power_on_event = threading.Event()
+    red_event = threading.Event()
+    green_event = threading.Event()
+    blue_event = threading.Event()
 
     # run_pir(rpir4_settings, totalPersons, threads, stop_event)
     # run_dht(rdht4_settings, totalPersons, threads, stop_event) 
-    run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
-    # run_rgb_diode(brgb_settings, totalPersons, threads, stop_event)
-    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
-    # run_pir(bir_settings, totalPersons, threads, stop_event)
-    # run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event)
+    # run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
+    run_rgb_diode(brgb_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
+    # run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
+    run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
 
 if __name__ == "__main__":
     settings = load_settings()

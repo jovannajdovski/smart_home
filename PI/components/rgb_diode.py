@@ -5,14 +5,15 @@ from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
 
+
 totalPersons=None
 
-def rgb_diode_callback(color, settings):      
+def rgb_diode_callback(color, settings, action = "Current color"):      
     t = time.localtime()
     # safe_print("\n"+"="*20,
     #             f"RGB DIODE ID: {settings['id']}",
     #             f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-    #             f"RGB DIODE: Current color {color}"
+    #             f"RGB DIODE: {action} {color}"
     #             )
     payload={
              'measurement': settings['type'],
@@ -25,14 +26,14 @@ def rgb_diode_callback(color, settings):
     
 
 
-def run_rgb_diode(settings, _totalPersons, threads, stop_event):
+def run_rgb_diode(settings, _totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event):
     global totalPersons
     totalPersons=_totalPersons
     # threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.rgb_diode import run_rgb_diode_simulator
         print(f"\nStarting {settings['id']} simulator\n")
-        rgb_diode_thread = threading.Thread(target = run_rgb_diode_simulator, args=(settings, 0.5, rgb_diode_callback, stop_event))
+        rgb_diode_thread = threading.Thread(target = run_rgb_diode_simulator, args=(settings, 0.5, rgb_diode_callback, stop_event, rgb_power_on_event, red_event, green_event, blue_event))
         rgb_diode_thread.start()
         threads.append(rgb_diode_thread)
         print(f"\n{settings['id']} simulator started\n")
@@ -41,7 +42,7 @@ def run_rgb_diode(settings, _totalPersons, threads, stop_event):
         print(f"\nStarting {settings['id']} loop\n")
         rgb_diode = RgbDiode(settings['id'], settings['red_pin'], settings['green_pin'], settings['blue_pin'])
         rgb_diode.setup_rgb_diode()
-        rgb_diode_thread = threading.Thread(target=run_rgb_diode_loop, args=(rgb_diode, settings, 0.5, rgb_diode_callback, stop_event))
+        rgb_diode_thread = threading.Thread(target=run_rgb_diode_loop, args=(rgb_diode, settings, 0.5, rgb_diode_callback, stop_event, rgb_power_on_event, red_event, green_event, blue_event))
         rgb_diode_thread.start()
         threads.append(rgb_diode_thread)
         print(f"\n{settings['id']} loop started\n")

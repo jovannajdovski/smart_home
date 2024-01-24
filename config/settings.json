@@ -255,15 +255,6 @@
     },
     "BIR": {
         "id": "BIR",
-        "type": "PIR",
-        "area": "Bedroom",
-        "simulated": true,
-        "pin": 5,
-        "name": "Bedroom Motion Sensor",
-        "connectedToPi": 3
-    },
-    "BREC": {
-        "id": "BREC",
         "type": "IR-RECEIVER",
         "area": "Bedroom",
         "simulated": true,

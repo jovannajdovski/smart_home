@@ -2,6 +2,12 @@ import RPi.GPIO as GPIO
 import time
 import random
 
+GREEN = "\033[32m"
+RED = "\033[31m"
+WHITE = "\033[47;30m"
+BLUE = "\033[34m"
+RESET = "\033[0m"
+
 class RgbDiode(object):
     def __init__(self, id, red_pin, green_pin, blue_pin):
         self.id=id
@@ -42,23 +48,34 @@ class RgbDiode(object):
     
 
 
-def run_rgb_diode_loop(rgb_diode, settings, delay, callback, stop_event):
+def run_rgb_diode_loop(rgb_diode, settings, delay, callback, stop_event, rgb_power_on_event, red_event, green_event, blue_event):
     
+    power_on = False
     while not stop_event.is_set():
-        rnd = random.random()
-        if rnd < 0.2:
+        if rgb_power_on_event.is_set() and not power_on:
             rgb_diode.turn_red()
-            callback("red", settings)
-        elif rnd < 0.4:
-            rgb_diode.turn_blue()
-            callback("blue", settings) 
-        elif rnd < 0.6:
-            rgb_diode.turn_green()
-            callback("green", settings) 
-        elif rnd < 0.8:
-            rgb_diode.turn_white()
-            callback("white", settings)
-        else:
+            callback("", settings, "RGB TURNED ON")
+            power_on = True
+        elif not rgb_power_on_event.is_set() and power_on:
             rgb_diode.turn_off()
-            callback("off", settings)
+            callback("", settings, "RGB TURNED OFF")
+            power_on = False
+
+        if red_event.is_set():
+            if power_on:
+                rgb_diode.turn_red()
+                callback(RED + "red" + RESET, settings)
+            red_event.clear()
+        
+        if green_event.is_set():
+            if power_on:
+                rgb_diode.turn_green()
+                callback(GREEN + "green" + RESET, settings)
+            green_event.clear()
+
+        if blue_event.is_set():
+            if power_on:
+                rgb_diode.turn_blue()
+                callback(BLUE + "blue" + RESET, settings)
+            blue_event.clear()
         time.sleep(delay)
