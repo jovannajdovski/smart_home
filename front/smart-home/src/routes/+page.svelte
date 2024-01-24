@@ -62,9 +62,10 @@
         // }
     };
 
-    let dashboardUrl1 = "http://localhost:3001/d/bca1b468-31d6-441e-a3fb-6b025d29087d/pi-1?orgId=1&refresh=5s&from=1706113885578&to=1706117485578"
-    let dashboardUrl2 = "http://localhost:3001/d/bc7cd3da-bcfc-47ec-9df5-2d78496e28d0/pi-2?orgId=1&from=1706108988730&to=1706119788730&refresh=auto"
-    let dashboardUrl3 = "http://localhost:3001/d/aa2d4838-c1b1-4e4f-9178-6fc8375972fc/pi-3?orgId=1&from=1706117285180&to=1706120885180"
+    let dashboardUrl1 = "http://localhost:3001/d/bca1b468-31d6-441e-a3fb-6b025d29087d/pi-1?orgId=1&refresh=5s&from=1706113885578&to=1706117485578&kiosk=tv"
+    let dashboardUrl2 = "http://localhost:3001/d/bc7cd3da-bcfc-47ec-9df5-2d78496e28d0/pi-2?orgId=1&from=1706108988730&to=1706119788730&refresh=auto&kiosk=tv"
+    let dashboardUrl3 = "http://localhost:3001/d/aa2d4838-c1b1-4e4f-9178-6fc8375972fc/pi-3?orgId=1&from=1706117285180&to=1706120885180&kiosk=tv"
+    
 </script>
 
 <div class="container">
@@ -128,7 +129,7 @@
             {#if selectedPiIdx === 1}            
                 <iframe class="dashboard" src={dashboardUrl1} frameborder="0"></iframe>
             {:else if selectedPiIdx === 2}          
-                <iframe class="dashboard" src={dashboardUrl2} frameborder="0"></iframe>
+                <iframe class="dashboard2" src={dashboardUrl2} frameborder="0"></iframe>
             {:else}
                 <iframe class="dashboard" src={dashboardUrl3} frameborder="0"></iframe>
             {/if}
@@ -137,10 +138,20 @@
 </div>
 
 <style>
+    .css-1peyh2t{
+        display: none !important; 
+    }
+
     .dashboard{
         margin: 30px;
         width: 100%;
         height: 1700px;
+    }
+
+    .dashboard2{
+        margin: 30px;
+        width: 100%;
+        height: 1900px;
     }
 
     .image {
