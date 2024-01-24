@@ -5,6 +5,7 @@
         name: string;
         area: string;
         code: string;
+        pi: number;
     };
 
     const numbers = [

@@ -6,6 +6,7 @@
         area: string;
         active: boolean;
         color: string;
+        pi: number;
     };
 
     const turn = () => {

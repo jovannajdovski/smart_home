@@ -176,16 +176,9 @@ def get_all():
            
         # print(f"Result for {measurement}: {result}")
 
-    # last_record=result_alarm[0].records[-1]
-    # measurement = last_record.get_value()
-    # time = last_record.get_time()
-    # value = last_record.get_measurement()
+    response_list.append({'id': settings["DMS"]["id"], 'type': settings["DMS"]['type'], 'name': settings["DMS"]["name"], 'area':settings["DMS"]["area"], 'code':"", 'pi':1})
     
-    # response = {
-    #     'measurement': measurement,
-    #     'time': time,
-    #     'value': value
-    # }
+    response_list.append({'id': settings["BIR"]["id"], 'type': settings["BIR"]['type'], 'name': settings["BIR"]["name"], 'area':settings["BIR"]["area"], 'active':False, 'color':"red", 'pi':3})
     return jsonify(response_list)
 
 # Route to store dummy data
