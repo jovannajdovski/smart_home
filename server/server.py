@@ -3,6 +3,7 @@ from flask_cors import CORS
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
 import json
 from datetime import datetime
 import json
@@ -97,6 +98,18 @@ def save_to_db(data):
         print("Response body:", e.body)
         print("Response headers:", e.headers)
 
+@app.route('/send_pin', methods=['POST'])
+def send_pin():
+    data = request.get_json()
+
+    pin = data.get('pin')
+
+    if pin is not None:
+        publish.multiple([('pin', json.dumps(data), 0, False)], hostname="localhost", port=1883)
+        return jsonify({'result': 'Success'}), 200 
+    else:
+        return jsonify({'error': 'Invalid request'}), 400 
+
 def generate_query(measurement):
     query = f'from(bucket: "iot_db") |> range(start: 0, stop: now()) |> filter(fn: (r) => r["_measurement"] == "{measurement}") |> yield(name: "last")'
     return query.format(bucket)
@@ -177,7 +190,7 @@ def get_all():
            
         # print(f"Result for {measurement}: {result}")
 
-    response_list.append({'id': settings["DMS"]["id"], 'type': settings["DMS"]['type'], 'name': settings["DMS"]["name"], 'area':settings["DMS"]["area"], 'code':"", 'pi':1})
+    response_list.append({'id': settings["DMS"]["id"], 'type': settings["DMS"]['type'], 'name': settings["DMS"]["name"], 'area':settings["DMS"]["area"], 'code':"0123", 'pi':1})
     
     response_list.append({'id': settings["BIR"]["id"], 'type': settings["BIR"]['type'], 'name': settings["BIR"]["name"], 'area':settings["BIR"]["area"], 'active':False, 'color':"red", 'pi':3})
     return jsonify(response_list)

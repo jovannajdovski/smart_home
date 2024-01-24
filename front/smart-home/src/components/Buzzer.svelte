@@ -4,8 +4,8 @@
 
 <div class="card">
     <h1>{buzzer.type} {buzzer.id}</h1>
-    <p>Area {buzzer.area}</p>
-    <p>{buzzer.value} at {buzzer.time}</p>
+    <p>Area <b>{buzzer.area}</b></p>
+    <p><b>{buzzer.value}</b> at <b>{buzzer.time}</b></p>
     <!-- <p>{`${buzzer.active ? "ACTIVE" : "INACTIVE"}`}</p> -->
 </div>
     
@@ -15,8 +15,14 @@
         border-radius: 5px;
         padding: 10px;
 
-        width: 200px;
-        height: 100px;
+        width: 300px;
+        height: 150px;
         margin: 5px;
+    }
+    h1, p{
+        padding: 5px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

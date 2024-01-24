@@ -1,6 +1,6 @@
 <script lang="ts">
     export let keypad: {
-        id: number;
+        id: string;
         type: string;
         name: string;
         area: string;
@@ -45,17 +45,40 @@
         display = `${display}${number}`;
     };
 
+    const sendPin = async (pin:string, id:string) => {
+        try {
+        const response = await fetch('http://localhost:5000/send_pin', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'pin':pin,'id':id}),
+        });
+        if (response.ok) {
+            console.log('send pin ok')
+        } else {
+            console.error('Failed to fetch data:', response.statusText);
+        }
+        } catch (error) {
+        console.error('Error:', error);
+        }
+    };
     const ok = () => {
         if (!display) return;
-        // :TODO send func
-        message = keypad.code === display ? "CORRECT" : "INCORRECT";
+        if (display.length!=4)
+            message="MUST BE 4 CHARACTERS"
+        else{
+            sendPin(display,keypad.id);
+            message = keypad.code === display ? "CORRECT" : "INCORRECT";
+        }
+            
         isDisplayingResults = true;
     };
 </script>
 
 <div class="card">
     <h1>{keypad.type} {keypad.name}</h1>
-    <p>Area {keypad.area}</p>
+    <p>Area <b>{keypad.area}</b></p>
 
     <div class="input-container">
         <div class="results">
@@ -92,7 +115,7 @@
         padding: 10px;
 
         width: 300px;
-        height: 450px;
+        height: 460px;
         margin: 5px;
     }
 
@@ -189,5 +212,11 @@
 
     .incorrect{
         color: rgb(216, 4, 0);
+    }
+    h1, p{
+        padding: 5px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

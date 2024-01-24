@@ -20,6 +20,8 @@ totalPersons=None
 totalPersons=None
 lcd_display = None
 
+_settings = None
+
 def lcd_callback(text, settings):    
     t = time.localtime()
     # safe_print("\n"+"="*20,
@@ -36,15 +38,17 @@ def lcd_callback(text, settings):
              'value': text,
              'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
+
     with counter_lock:
-        batch.append((settings['type'], json.dumps(payload), 0, True))
+        batch.append((settings['type'], json.dumps(payload), 0, False))
         publish_data_counter.increment()
     if publish_data_counter.value>=publish_data_limit:
         publish_event.set()
 
 
 def run_lcd(settings, _totalPersons, threads, stop_event):
-    global totalPersons
+    global totalPersons, _settings
+    _settings = settings
     totalPersons=_totalPersons
     #print("jjj")
     threads.append(publisher_thread)
@@ -70,14 +74,15 @@ def run_lcd(settings, _totalPersons, threads, stop_event):
         print(f"\n{settings['id']} loop started\n")
 
 
-def display_condition(humidity, temperature, settings):
+def display_condition(humidity, temperature):
+    global _settings
     def display_thread():
         global lcd_display
         if lcd_display is not None:
             lcd_display.display_cond(humidity, temperature)
         else:
             text = "Temperature: {}\nHumidity: {}".format(temperature, humidity)
-            lcd_callback(text, settings)
+            lcd_callback(text, _settings)
 
     display_condition_thread = threading.Thread(target=display_thread)
     display_condition_thread.start()

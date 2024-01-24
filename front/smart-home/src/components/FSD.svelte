@@ -4,8 +4,8 @@
 
 <div class="card">
     <h1>4 Digit 7 Segment Display {display.id}</h1>
-    <p>Area {display.area}</p>
-    <p>{display.value}</p>
+    <p>Area <b>{display.area}</b></p>
+    <p><b>{display.value}</b></p>
 </div>
     
 <style>
@@ -14,8 +14,14 @@
         border-radius: 5px;
         padding: 10px;
 
-        width: 200px;
-        height: 100px;
+        width: 300px;
+        height: 150px;
         margin: 5px;
+    }
+    h1, p{
+        padding: 5px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

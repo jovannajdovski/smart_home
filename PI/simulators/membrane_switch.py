@@ -25,9 +25,10 @@ def run_membrane_switch_simulator(settings, delay, callback, stop_event):
     #         callback(pressed_key, settings)
     #     if stop_event.is_set():
     #         break
-    for pressed_key in generate_values_password():
-        print('pressed key ', pressed_key)
-        if pressed_key is not None:
-            callback(pressed_key, settings)
+    while True:
+        #for pressed_key in generate_values_password():
+            # print('pressed key ', pressed_key)
+            # if pressed_key is not None:
+            #     callback(pressed_key, settings)
         if stop_event.is_set():
             break

@@ -92,39 +92,88 @@
     </div>
 
     <div class="pi-container">
-        <div class="pi-components">
-            {#each data as component}
-                {#if component.pi === selectedPiIdx}
-                    {#if component.type === "BUZZER"}            
-                        <Buzzer buzzer={component} />
-                    {:else if component.type === "DHT"}          
-                        <Dht sensor={component} />
-                    {:else if component.type === "LIGHT"}         
-                        <DoorLight light={component} />
-                    {:else if component.type === "BUTTON"}       
-                        <DoorSensor sensor={component} />
-                    {:else if component.type === "4DD"}            
-                        <FSD display={component} />
-                    {:else if component.type === "GYRO"}        
-                        <Gyro sensor={component} />
-                    {:else if component.type === "IR-RECEIVER"}
-                        <Infrared infrared={component} />
-                    {:else if component.type === "LCD"}          
-                        <LCD display={component} />
-                    {:else if component.type === "MS"}
-                        <MembraneSwitch keypad={component} />
-                    {:else if component.type === "PIR"}
-                        <MotionSensor sensor={component} />
-                    {:else if component.type === "RGB-LIGHT"}  
-                        <Rgb rgb={component} />
-                    {:else if component.type === "US"}         
-                        <UltrasonicSensor sensor={component} />
-                    {:else}
-                        <div class="bg-gray-200 w-10 h-10 rounded-full m-3" />
+        {#if data.find(element => element.type === 'MS' && element.pi === selectedPiIdx)}
+        <div style="width: 90%;">
+            <div style="float:left; width: 75%; margin: 50px 0px 0px 0px">
+                <div class="pi-components-split">
+                    {#each data as component}
+                        {#if component.pi === selectedPiIdx}
+                            {#if component.type === "BUZZER"}            
+                                <Buzzer buzzer={component} />
+                            {:else if component.type === "DHT"}          
+                                <Dht sensor={component} />
+                            {:else if component.type === "LIGHT"}         
+                                <DoorLight light={component} />
+                            {:else if component.type === "BUTTON"}       
+                                <DoorSensor sensor={component} />
+                            {:else if component.type === "4DD"}            
+                                <FSD display={component} />
+                            {:else if component.type === "GYRO"}        
+                                <Gyro sensor={component} />
+                            {:else if component.type === "IR-RECEIVER"}
+                                <Infrared infrared={component} />
+                            {:else if component.type === "LCD"}          
+                                <LCD display={component} />
+                            {:else if component.type === "PIR"}
+                                <MotionSensor sensor={component} />
+                            {:else if component.type === "RGB-LIGHT"}  
+                                <Rgb rgb={component} />
+                            {:else if component.type === "US"}         
+                                <UltrasonicSensor sensor={component} />
+                            
+                            {/if}
+                        {/if}
+                    {/each}
+                </div>
+            </div>
+            <div style="float:right; width: 20%; justify-content: center; margin: 50px 50px 0px 0px">
+                <div class="pi-components-split">
+                    {#each data as component}
+                        {#if component.pi === selectedPiIdx}
+                            {#if component.type === "MS"}
+                                <MembraneSwitch keypad={component} />
+                            {/if}
+                        {/if}
+                    {/each}
+                </div>
+            </div>
+         </div>
+            
+        {:else}
+            <div class="pi-components">
+                {#each data as component}
+                    {#if component.pi === selectedPiIdx}
+                        {#if component.type === "BUZZER"}            
+                            <Buzzer buzzer={component} />
+                        {:else if component.type === "DHT"}          
+                            <Dht sensor={component} />
+                        {:else if component.type === "LIGHT"}         
+                            <DoorLight light={component} />
+                        {:else if component.type === "BUTTON"}       
+                            <DoorSensor sensor={component} />
+                        {:else if component.type === "4DD"}            
+                            <FSD display={component} />
+                        {:else if component.type === "GYRO"}        
+                            <Gyro sensor={component} />
+                        {:else if component.type === "IR-RECEIVER"}
+                            <Infrared infrared={component} />
+                        {:else if component.type === "LCD"}          
+                            <LCD display={component} />
+                        {:else if component.type === "MS"}
+                            <MembraneSwitch keypad={component} />
+                        {:else if component.type === "PIR"}
+                            <MotionSensor sensor={component} />
+                        {:else if component.type === "RGB-LIGHT"}  
+                            <Rgb rgb={component} />
+                        {:else if component.type === "US"}         
+                            <UltrasonicSensor sensor={component} />
+                        {:else}
+                            <div class="bg-gray-200 w-10 h-10 rounded-full m-3" />
+                        {/if}
                     {/if}
-                {/if}
-            {/each}
-        </div>
+                {/each}
+            </div>
+        {/if}
         <div class="grafana-container">
             {#if selectedPiIdx === 1}            
                 <iframe class="dashboard" src={dashboardUrl1} frameborder="0"></iframe>
@@ -169,7 +218,7 @@
         margin: 0 auto;
         /* background-color: #484545; */
     }
-
+    
     .pi-container {
         background-color: #797881;
         border-radius: 10px;
@@ -188,6 +237,15 @@
         width: 90%;
         margin-top: 30px;
     }
+    .pi-components-split{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 20px;
+        width: 100%;
+        margin-top: 30px; 
+    }
+
 
     .header {
         text-align: center;
