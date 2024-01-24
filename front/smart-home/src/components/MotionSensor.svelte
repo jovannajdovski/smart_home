@@ -4,8 +4,8 @@
 
 <div class="card">
     <h1>{sensor.type} {sensor.id}</h1>
-    <p>Area {sensor.area}</p>
-    <p>Last detected {sensor.time}</p>
+    <p>Area <b>{sensor.area}</b></p>
+    <p>Last detected <b>{sensor.time}</b></p>
 </div>
     
 <style>
@@ -14,8 +14,14 @@
         border-radius: 5px;
         padding: 10px;
 
-        width: 200px;
-        height: 100px;
+        width: 300px;
+        height: 150px;
         margin: 5px;
+    }
+    h1, p{
+        padding: 5px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

@@ -4,8 +4,8 @@
 
 <div class="card">
     <h1>{light.type} {light.id}</h1>
-    <p>Area {light.area}</p>
-    <p>{light.value} from {light.time} </p>
+    <p>Area <b>{light.area}</b></p>
+    <p><b>{light.value}</b> from <b>{light.time}</b> </p>
 </div>
     
 <style>
@@ -14,8 +14,14 @@
         border-radius: 5px;
         padding: 10px;
 
-        width: 200px;
-        height: 100px;
+        width: 300px;
+        height: 150px;
         margin: 5px;
+    }
+    h1, p{
+        padding: 5px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

@@ -39,7 +39,7 @@ def buzzer_callback(code, settings):
              'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     with counter_lock:
-        batch.append((settings['type'], json.dumps(payload), 0, True))
+        batch.append((settings['type'], json.dumps(payload), 0, False))
         publish_data_counter.increment()
     if publish_data_counter.value>=publish_data_limit:
         publish_event.set()
@@ -98,6 +98,7 @@ def check_password(pin):
         invoke_alarm()
     elif not alarm.active and pin==alarm.pin:
         time.sleep(10)
+        print('inactive->active')
         alarm.active=True
         send_alarm_mqtt("Active")   
 
@@ -108,7 +109,7 @@ def send_alarm_mqtt(value):
              'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
     with counter_lock:
-        batch.append(("ALARM", json.dumps(payload), 0, True))
+        batch.append(("ALARM", json.dumps(payload), 0, False))
         publish_data_counter.increment()
     if publish_data_counter.value>=1:
         publish_event.set()

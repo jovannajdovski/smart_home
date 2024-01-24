@@ -4,9 +4,9 @@
 
 <div class="card">
     <h1>{sensor.type} {sensor.id}</h1>
-    <p>Area {sensor.area}</p>
-    <p>Temperature {sensor.value[0]}</p>
-    <p>Humidity {sensor.value[1]}</p>
+    <p>Area <b>{sensor.area}</b></p>
+    <p>Temperature <b>{sensor.value[0]}</b></p>
+    <p>Humidity <b>{sensor.value[1]}</b></p>
 </div>
     
 <style>
@@ -15,8 +15,14 @@
         border-radius: 5px;
         padding: 10px;
 
-        width: 200px;
-        height: 100px;
+        width: 300px;
+        height: 150px;
         margin: 5px;
+    }
+    h1, p{
+        padding: 4px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

@@ -41,7 +41,7 @@ def pir_callback(motion_detected, settings):
              'time': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         }
         with counter_lock:
-            batch.append((settings['type'], json.dumps(payload), 0, True))
+            batch.append((settings['type'], json.dumps(payload), 0, False))
             publish_data_counter.increment()
         if publish_data_counter.value>=publish_data_limit:
             publish_event.set()

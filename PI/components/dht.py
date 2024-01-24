@@ -51,8 +51,8 @@ def dht_callback(humidity, temperature, code, settings):
         }
     with counter_lock:
         
-        batch.append((settings['type'], json.dumps(humidity_payload), 0, True))
-        batch.append((settings['type'], json.dumps(temperature_payload), 0, True))
+        batch.append((settings['type'], json.dumps(humidity_payload), 0, False))
+        batch.append((settings['type'], json.dumps(temperature_payload), 0, False))
         publish_data_counter.increment()
     if publish_data_counter.value>=publish_data_limit:
         publish_event.set()

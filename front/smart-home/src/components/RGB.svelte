@@ -5,7 +5,7 @@
 
 <div class="card">
     <h1>{rgb.type} {rgb.id}</h1>
-    <p>Area {rgb.area}</p>
+    <p>Area <b>{rgb.area}</b></p>
 
     <div class="color-picker">
         <div
@@ -40,13 +40,19 @@
         border-radius: 5px;
         padding: 10px;
 
-        width: 200px;
-        height: 130px;
+        width: 300px;
+        height: 150px;
         margin: 5px;
     }
 
     .color-picker {
         display: flex;
         flex-direction: row;
+    }
+    h1, p{
+        padding: 5px;
+    }
+    b{
+        font-size: 18px;
     }
 </style>

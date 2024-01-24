@@ -4,7 +4,7 @@ from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
 from components.pir import run_pir
-from components.buzzer import run_buzzer
+from components.buzzer import run_buzzer, check_password
 from components.button import run_button
 from components.rgb_diode import run_rgb_diode
 from components.membrane_switch import run_membrane_switch
@@ -14,6 +14,8 @@ from components.lcd import run_lcd
 from components.led_diode import run_led_diode
 from components.ir_receiver import run_ir_receiver
 import time
+import json
+import paho.mqtt.client as mqtt
 from utils.mqtt import connect
 from utils.alarm import Alarm
 from utils.clock_alarm import run_clock_alarm
@@ -93,14 +95,34 @@ def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
     run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
 
+def subscribe_on_topics():
+    mqtt_client = mqtt.Client()
+    mqtt_client.on_connect = on_connect
+    mqtt_client.on_message = on_message
+    mqtt_client.connect("localhost", 1883, 60)
+    mqtt_client.loop_start()
+
+def on_connect(client, userdata, flags, rc):
+    client.subscribe("pin")
+
+
+def on_message(client, userdata, msg):
+    print(f"Rec. TOPIC \t: {msg.topic}")
+    
+    data = json.loads(msg.payload.decode('utf-8'))
+    if msg.topic=="pin":
+        check_password(data['pin'])
+    else:
+        pass
+
 if __name__ == "__main__":
     settings = load_settings()
     stop_threads = []
     stop_event = threading.Event()
     totalPersons={'value':settings["totalPersons"], 'lock': threading.Lock()}
-
+    subscribe_on_topics()
     try:
-        alarm = Alarm(pin="0123", active=False)
+        alarm = Alarm(pin="0123", active=True)
         if settings["PI1"]["running"]:
             run_pi1(settings, totalPersons, alarm, stop_threads, stop_event)
         if settings["PI2"]["running"]:
