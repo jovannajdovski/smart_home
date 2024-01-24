@@ -14,16 +14,8 @@
     import MotionSensor from "../components/MotionSensor.svelte";
     import Rgb from "../components/RGB.svelte";
 
-    // :TODO load pis object
-    // import pis from "../data.json";
-
-    // let pis: {
-    //     id: number;
-    //     alt_description: string;
-    // }[] = [];
     let pis=[1,2,3]
     let selectedPiIdx = 1;
-    let selectedPi: any;
 
     let data= [{}];
 
@@ -41,10 +33,7 @@
     };
 
     let intervalId: number | undefined;
-    
-    // beforeUpdate(() => {
-    //     clearInterval(intervalId);
-    // });
+
 
     onMount(() => {
         fetchData();
@@ -113,11 +102,11 @@
                         <FSD display={component} />
                     {:else if component.type === "GYRO"}        
                         <Gyro sensor={component} />
-                    {:else if component.type === "IR-RECEIVER"} <!-- TODO -->
+                    {:else if component.type === "IR-RECEIVER"}
                         <Infrared infrared={component} />
                     {:else if component.type === "LCD"}          
                         <LCD display={component} />
-                    {:else if component.type === "MS"}           <!-- TODO -->
+                    {:else if component.type === "MS"}
                         <MembraneSwitch keypad={component} />
                     {:else if component.type === "PIR"}
                         <MotionSensor sensor={component} />

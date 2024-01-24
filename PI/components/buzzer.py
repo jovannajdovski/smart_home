@@ -20,6 +20,7 @@ publisher_thread.start()
 totalPersons=None
 alarm=None
 buzzer_actuator=None
+alarm_clock_event = None
 
 def buzzer_callback(code, settings):    
     t = time.localtime()
@@ -45,16 +46,21 @@ def buzzer_callback(code, settings):
     
 
 
-def run_buzzer(settings, _totalPersons, _alarm, threads, stop_event):
+def run_buzzer(settings, _totalPersons, _alarm, threads, stop_event, _alarm_clock_event=None):
     global totalPersons
     totalPersons=_totalPersons
     global alarm
     if alarm is None:
         alarm=_alarm
     threads.append(publisher_thread)
+
+    global alarm_clock_event
+    alarm_clock_event = _alarm_clock_event
+
+    # threads.append(publisher_thread)
     if settings['simulated']:
         print(f"\nStarting {settings['id']} simulator\n")
-        buzzer_thread = threading.Thread(target = run_buzzer_simulator, args=(settings, 0.1, buzzer_callback, stop_event))
+        buzzer_thread = threading.Thread(target = run_buzzer_simulator, args=(settings, 0.1, buzzer_callback, stop_event, alarm_clock_event))
         buzzer_thread.start()
         threads.append(buzzer_thread)
         print(f"\n{settings['id']} simulator started\n")
@@ -65,7 +71,7 @@ def run_buzzer(settings, _totalPersons, _alarm, threads, stop_event):
         buzzer.setup_buzzer()
         global buzzer_actuator
         buzzer_actuator=buzzer
-        buzzer_thread = threading.Thread(target=run_buzzer_loop, args=(buzzer, settings, 3, 0.5, buzzer_callback, stop_event))
+        buzzer_thread = threading.Thread(target=run_buzzer_loop, args=(buzzer, settings, 3, 0.5, buzzer_callback, stop_event, alarm_clock_event))
         buzzer_thread.start()
         threads.append(buzzer_thread)
         print(f"\n{settings['id']} loop started\n")
@@ -86,6 +92,7 @@ def check_password(pin):
     print('check password: ', pin)
     if alarm.active and pin==alarm.pin:
         alarm.active=False
+        print('active->inactive')
         send_alarm_mqtt("Inactive")
     elif alarm.active and pin!=alarm.pin:
         invoke_alarm()

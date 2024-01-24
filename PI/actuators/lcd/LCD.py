@@ -51,6 +51,15 @@ class LCD(object):
         self.lcd.setCursor(0,0)  # set cursor position
         self.lcd.message( 'Hello boss, if you have password,\n' )
         self.lcd.message( "you can enter garage" ) 
+
+    def display_cond(self, humidity, temperature):
+        self.mcp.output(3,1)     # turn on LCD backlight
+        self.lcd.begin(16,2)     # set number of LCD lines and columns
+       
+        #lcd.clear()
+        self.lcd.setCursor(0,0)  # set cursor position
+        self.lcd.message( "Temperature: {}\n".format(temperature) )
+        self.lcd.message( "Humidity: {}".format(humidity)) 
             
     def destroy(self):
         self.lcd.clear()

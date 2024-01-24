@@ -18,14 +18,38 @@ publisher_thread.daemon = True
 publisher_thread.start()
 totalPersons=None
 
+rgb_power_on_event = None
+red_event = None
+green_event = None
+blue_event = None
+power_on = False
+
 def ir_receiver_callback(command, settings):
+    global rgb_power_on_event, red_event, green_event, blue_event, power_on
     t = time.localtime()
 
-    safe_print("\n"+"="*20,
-            f"IR RECEIVER ID: {settings['id']}",
-            f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-            f"Command: {command}",
-            )
+    if command == "OK":
+        power_on = not power_on
+        if power_on:
+            rgb_power_on_event.set()
+        else:
+            rgb_power_on_event.clear()
+    
+    if command == "1":
+        red_event.set()
+    
+    if command == "2":
+        green_event.set()
+    
+    if command == "3":
+        blue_event.set()
+
+
+    # safe_print("\n"+"="*20,
+    #         f"IR RECEIVER ID: {settings['id']}",
+    #         f"Timestamp: {time.strftime('%H:%M:%S', t)}",
+    #         f"Command: {command}",
+    #         )
 
     command_payload={
              'measurement': 'Receiver_Command',
@@ -44,9 +68,15 @@ def ir_receiver_callback(command, settings):
         publish_event.set()
 
 
-def run_ir_receiver(settings, _totalPersons, threads, stop_event):
-    global totalPersons
+def run_ir_receiver(settings, _totalPersons, threads, stop_event, _rgb_power_on_event, _red_event, _green_event, _blue_event):
+    global totalPersons, rgb_power_on_event, red_event, green_event, blue_event
     totalPersons=_totalPersons
+
+    rgb_power_on_event = _rgb_power_on_event
+    red_event = _red_event
+    green_event = _green_event
+    blue_event = _blue_event
+
     threads.append(publisher_thread)
     if settings['simulated']:
         print(f"\nStarting {settings['id']} simulator\n")

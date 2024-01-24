@@ -1,5 +1,9 @@
 {
-    "totalPersons":30,
+    "clockAlarm": {
+        "time": "21:40",
+        "active": true
+    },
+    "totalPersons":50,
     "PI1": {
         "running": true,
         "simulated": true

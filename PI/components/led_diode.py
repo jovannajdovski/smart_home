@@ -16,7 +16,8 @@ publisher_thread = threading.Thread(target=publish_message, args=(publish_event,
 publisher_thread.daemon = True
 publisher_thread.start()
 totalPersons=None
-
+diode = None
+_settings = None
 
 def led_diode_callback(state, settings):      
     t = time.localtime()
@@ -25,6 +26,7 @@ def led_diode_callback(state, settings):
     #             f"Timestamp: {time.strftime('%H:%M:%S', t)}",
     #             f"LED DIODE: {state}"
     #             )
+    
     payload={
              'measurement': settings['type'],
              'simulated': settings['simulated'],
@@ -44,6 +46,8 @@ def led_diode_callback(state, settings):
 
 def run_led_diode(settings, _totalPersons, threads, stop_event):
     global totalPersons
+    global _settings
+    _settings = settings
     totalPersons=_totalPersons
     threads.append(publisher_thread)
     if settings['simulated']:
@@ -57,8 +61,31 @@ def run_led_diode(settings, _totalPersons, threads, stop_event):
         from actuators.led_diode import run_led_diode_loop, LedDiode
         print(f"\nStarting {settings['id']} loop\n")
         led_diode = LedDiode(settings['id'], settings['pin'])
-        led_diode.setup_rgb_diode()
+        led_diode.setup_led_diode()
+
+        global diode
+        diode = led_diode
+
         led_diode_thread = threading.Thread(target=run_led_diode_loop, args=(led_diode, settings, 5, led_diode_callback, stop_event))
         led_diode_thread.start()
         threads.append(led_diode_thread)
         print(f"\n{settings['id']} loop started\n")
+
+
+def turn_led_diode_for_10sec():
+    def led_diode_thread():
+        global _settings
+        if diode is not None:
+            diode.turn_on()
+            led_diode_callback("on", _settings)
+            time.sleep(10)
+            diode.turn_off()
+            led_diode_callback("off", _settings)
+        else:
+            led_diode_callback("on", _settings)
+            time.sleep(10)
+            led_diode_callback("off", _settings)
+
+    # Create a new thread and start it
+    diode_thread = threading.Thread(target=led_diode_thread)
+    diode_thread.start()

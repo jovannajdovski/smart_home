@@ -9,9 +9,9 @@ def generate_values():
     
 
 def run_ir_receiver_simulator(settings, delay, callback, stop_event):
-        for command in generate_values():
-            time.sleep(delay)
-            callback(command, settings)
-            if stop_event.is_set():
-                break
+    for command in generate_values():
+        time.sleep(delay)
+        callback(command, settings)
+        if stop_event.is_set():
+            break
               

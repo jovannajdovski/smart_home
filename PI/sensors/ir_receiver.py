@@ -82,7 +82,7 @@ def run_ir_receiver_loop(ir_receiver, settings, callback, stop_event):
         inData = ir_receiver.convertHex(ir_receiver.getBinary()) #Runs subs to get incoming hex value
         for button in range(len(ir_receiver.Buttons)):#Runs through every value in list
             if hex(ir_receiver.Buttons[button]) == inData: #Checks this against incoming
-                print(ir_receiver.ButtonsNames[button]) #Prints corresponding english name for button
+                #print(ir_receiver.ButtonsNames[button]) #Prints corresponding english name for button
                 callback(ir_receiver.ButtonsNames[button], settings)
 
 # "LEFT", "RIGHT", "UP", "DOWN", "OK",

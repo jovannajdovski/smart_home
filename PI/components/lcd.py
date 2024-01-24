@@ -17,7 +17,10 @@ publisher_thread.daemon = True
 publisher_thread.start()
 totalPersons=None
 
-def lcd_callback(text, settings):      
+totalPersons=None
+lcd_display = None
+
+def lcd_callback(text, settings):    
     t = time.localtime()
     # safe_print("\n"+"="*20,
     #             f"LCD ID: {settings['id']}",
@@ -57,8 +60,24 @@ def run_lcd(settings, _totalPersons, threads, stop_event):
         print(f"\nStarting {settings['id']} loop\n")
         lcd = LCD(settings['id'], settings['pin_rs'], settings['pin_e'], settings['pin_db1'], settings['pin_db2'], settings['pin_db3'], settings['pin_db4'])
         lcd.setup_lcd()
+
+        global lcd_display
+        lcd_display = lcd
+
         lcd_thread = threading.Thread(target=run_lcd_loop, args=(lcd, settings, 5, lcd_callback, stop_event))
         lcd_thread.start()
         threads.append(lcd_thread)
         print(f"\n{settings['id']} loop started\n")
 
+
+def display_condition(humidity, temperature, settings):
+    def display_thread():
+        global lcd_display
+        if lcd_display is not None:
+            lcd_display.display_cond(humidity, temperature)
+        else:
+            text = "Temperature: {}\nHumidity: {}".format(temperature, humidity)
+            lcd_callback(text, settings)
+
+    display_condition_thread = threading.Thread(target=display_thread)
+    display_condition_thread.start()

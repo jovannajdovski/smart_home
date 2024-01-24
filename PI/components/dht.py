@@ -7,6 +7,7 @@ import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
 from utils.counter import Counter
+from components.lcd import display_condition
 
 batch = []
 publish_data_counter = Counter(0)
@@ -27,6 +28,9 @@ def dht_callback(humidity, temperature, code, settings):
     #            f"Humidity: {humidity}%",
     #            f"Temperature: {temperature}°C"
     #            )
+
+    display_condition_on_LCD(settings, humidity, temperature)
+
     humidity_payload={
              'measurement': 'Humidity',
              'simulated': settings['simulated'],
@@ -72,3 +76,7 @@ def run_dht(settings, _totalPersons, threads, stop_event):
         dht_thread.start()
         threads.append(dht_thread)
         print(f"\n{settings['id']} loop started\n")
+
+def display_condition_on_LCD(settings, humidity, temperature):
+    if settings['id'] == 'GDHT':
+        display_condition(humidity, temperature, settings)
