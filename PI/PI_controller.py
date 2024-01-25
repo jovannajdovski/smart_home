@@ -4,10 +4,10 @@ from settings import load_settings
 from components.dht import run_dht
 from components.uds import run_uds
 from components.pir import run_pir
-from components.buzzer import run_buzzer, check_password
+from components.buzzer import run_buzzer
 from components.button import run_button
 from components.rgb_diode import run_rgb_diode
-from components.membrane_switch import run_membrane_switch
+from components.membrane_switch import run_membrane_switch, membrane_switch_callback
 from components.gyro import run_gyro
 from components.segment_display import run_4segment_display
 from components.lcd import run_lcd
@@ -112,7 +112,10 @@ def on_message(client, userdata, msg):
     
     data = json.loads(msg.payload.decode('utf-8'))
     if msg.topic=="pin":
-        check_password(data['pin'])
+        settings = load_settings()
+        for char in data['pin']:
+            membrane_switch_callback(char, settings['DMS'],1)
+        # check_password(data['pin'])
     elif msg.topic=="rgb-command":
         rgb_command(data['command'])
     elif msg.topic=="clock-command":

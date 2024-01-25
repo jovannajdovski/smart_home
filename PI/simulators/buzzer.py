@@ -26,6 +26,7 @@ def panic(callback, settings, reason, panic_stop_event):
     callback("PANIC", settings, reason)
     while True:
         if panic_stop_event.is_set():
+            callback("STOPPED", settings, "STOP")
             break
         beep()
 
@@ -46,10 +47,10 @@ def run_buzzer_simulator(settings, delay, callback, stop_event, alarm_clock_even
     while not stop_event.is_set():
         if settings["id"] == "BB":
             if alarm_clock_event.is_set() and not clock_alarm_started:
-                callback("CLOCK ALARM STARTED", settings)
+                callback("CLOCK ALARM STARTED", settings, "CLOCK ALARM")
                 clock_alarm_started = True
             elif not alarm_clock_event.is_set() and clock_alarm_started:
-                callback("CLOCK ALARM TURNED OFF", settings)
+                callback("CLOCK ALARM TURNED OFF", settings, "CLOCK ALARM")
                 clock_alarm_started = False
         time.sleep(delay)
 

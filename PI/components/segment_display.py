@@ -56,7 +56,7 @@ def run_4segment_display(settings, _totalPersons, threads, stop_event, _alarm_cl
     if settings['simulated']:
         from simulators.segment_display import run_4segment_simulator
         print(f"\nStarting {settings['id']} simulator\n")
-        segment_display_thread = threading.Thread(target = run_4segment_simulator, args=(settings, 1, segment_display_callback, stop_event, alarm_clock_event))
+        segment_display_thread = threading.Thread(target = run_4segment_simulator, args=(settings, 5, segment_display_callback, stop_event, alarm_clock_event))
         segment_display_thread.start()
         threads.append(segment_display_thread)
         print(f"\n{settings['id']} simulator started\n")
@@ -67,7 +67,7 @@ def run_4segment_display(settings, _totalPersons, threads, stop_event, _alarm_cl
                                           settings['seg_pin5'], settings['seg_pin6'], settings['seg_pin7'], settings['seg_pin8'],
                                           settings['dig_pin1'], settings['dig_pin2'], settings['dig_pin3'], settings['dig_pin4'],)
 
-        segment_display_thread = threading.Thread(target=display_time_on_segment_display, args=(segment_display, settings, 1, segment_display_callback, stop_event, alarm_clock_event))
+        segment_display_thread = threading.Thread(target=display_time_on_segment_display, args=(segment_display, settings, 5, segment_display_callback, stop_event, alarm_clock_event))
         segment_display_thread.start()
         threads.append(segment_display_thread)
         print(f"\n{settings['id']} loop started\n")

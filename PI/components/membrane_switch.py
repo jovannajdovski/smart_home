@@ -10,7 +10,7 @@ from components.buzzer import check_password
 
 batch = []
 publish_data_counter = Counter(0)
-publish_data_limit = 5
+publish_data_limit = 4
 publish_event=threading.Event()
 counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
@@ -20,7 +20,8 @@ totalPersons=None
 last_four=[None, None, None, None]
 last_updated=None
 
-def membrane_switch_callback(key, settings):      
+def membrane_switch_callback(key, settings, sleep):
+    time.sleep(sleep)
     t = datetime.now()
     # safe_print("\n"+"="*20,
     #             f"MEMBRANE SWITCH ID: {settings['id']}",
@@ -48,8 +49,8 @@ def membrane_switch_callback(key, settings):
         last_four=last_four[1:] + [key]
     if None not in last_four:
         check_password(''.join(last_four))
-        last_four=[None,None,None,None]
-    
+        last_four=[None,None,None,None] 
+
     with counter_lock:
         batch.append((settings['type'], json.dumps(payload), 0, False))
         publish_data_counter.increment()

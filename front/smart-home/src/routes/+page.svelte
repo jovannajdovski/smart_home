@@ -36,7 +36,7 @@
 
     onMount(() => {
         fetchData();
-        intervalId = setInterval(fetchData, 10000);
+        intervalId = setInterval(fetchData, 20000);
         return () => clearInterval(intervalId);
     });
 
