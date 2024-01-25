@@ -1,3 +1,5 @@
+#from wsgiref.simple_server import WSGIServer
+from gevent.pywsgi import WSGIServer
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from influxdb_client import InfluxDBClient, Point
@@ -42,7 +44,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(f"Rec. TOPIC \t: {msg.topic}")
+    #print(f"Rec. TOPIC \t: {msg.topic}")
     
     data = json.loads(msg.payload.decode('utf-8'))
     if msg.topic=="ALARM":
@@ -118,6 +120,19 @@ def send_rgb_command():
 
     if command is not None:
         publish.multiple([('rgb-command', json.dumps(data), 0, False)], hostname="localhost", port=1883)
+        return jsonify({'result': 'Success'}), 200 
+    else:
+        return jsonify({'error': 'Invalid request'}), 400 
+    
+
+@app.route('/send_clock_command', methods=['POST'])
+def send_clock_command():
+    data = request.get_json()
+    print(data)
+    command = data.get('command')
+
+    if command is not None:
+        publish.multiple([('clock-command', json.dumps(data), 0, False)], hostname="localhost", port=1883)
         return jsonify({'result': 'Success'}), 200 
     else:
         return jsonify({'error': 'Invalid request'}), 400 
@@ -259,6 +274,8 @@ def load_settings(filePath='../config/settings.json'):
         return json.load(f)
 
 if __name__ == '__main__':
+    #http_server = WSGIServer(('', 5000), app)
+    #http_server.serve_forever()
     app.run(debug=False)
 
 

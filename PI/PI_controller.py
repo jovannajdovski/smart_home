@@ -18,7 +18,7 @@ import json
 import paho.mqtt.client as mqtt
 from utils.mqtt import connect
 from utils.alarm import Alarm
-from utils.clock_alarm import run_clock_alarm
+from utils.clock_alarm import change_clock_alarm, run_clock_alarm, stop_clock_alarm
 
 try:
     import RPi.GPIO as GPIO
@@ -90,9 +90,9 @@ def run_pi3(settings, totalPersons, alarm, threads, stop_event):
 
     #run_pir(rpir4_settings, totalPersons, threads, stop_event)
     #run_dht(rdht4_settings, totalPersons, threads, stop_event) 
-    #run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
+    run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
     run_rgb_diode(brgb_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
-    #run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
+    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
     run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
 
 def subscribe_on_topics():
@@ -105,6 +105,7 @@ def subscribe_on_topics():
 def on_connect(client, userdata, flags, rc):
     client.subscribe("pin")
     client.subscribe("rgb-command")
+    client.subscribe("clock-command")
 
 
 def on_message(client, userdata, msg):
@@ -115,6 +116,14 @@ def on_message(client, userdata, msg):
         check_password(data['pin'])
     elif msg.topic=="rgb-command":
         rgb_command(data['command'])
+    elif msg.topic=="clock-command":
+        if data['command']=="set":
+            hm = data['time']
+            h = hm[0:2]
+            m = hm[3:5]
+            change_clock_alarm(h,m)
+        if data['command']=="off":
+            stop_clock_alarm()
     else:
         pass
 
