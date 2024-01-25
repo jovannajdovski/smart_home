@@ -31,10 +31,19 @@ class Buzzer(object):
             self.buzz(buzz_duration)
             time.sleep(buzz_duration)
     
-    def panic(self, buzz_duration, panic_duration, settings, callback, reason):
-        callback("ALARM", settings, reason)
-        for _ in range(panic_duration//(buzz_duration*2)):
+    def panic(self, buzz_duration, panic_duration, settings, callback, reason, panic_stop_event):
+        # callback("PANIC", settings, reason)
+        # for _ in range(panic_duration//(buzz_duration*2)):
+        #     self.buzz(buzz_duration)
+        # callback("STOPPED", settings, "STOP")
+
+        callback("PANIC", settings, reason)
+        while True:
             self.buzz(buzz_duration)
+            if panic_stop_event.is_set():
+                callback("STOPPED", settings, "STOP")
+                break
+
 
     def turn_on(self):
         GPIO.output(self.pin, True)

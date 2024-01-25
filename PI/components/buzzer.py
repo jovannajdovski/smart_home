@@ -87,12 +87,15 @@ def run_buzzer(settings, _totalPersons, _alarm, threads, _panic_stop_event, stop
 
 def invoke_alarm(reason):
     def alarm_thread_actuator(settings):
-        buzzer_actuator.panic(10, 0.5, settings, buzzer_callback, reason)
+        buzzer_actuator.panic(10, 0.5, settings, buzzer_callback, reason, panic_stop_event)
+        if alarm.active == False:
+            send_alarm_mqtt("Inactive")
         
     def alarm_thread_simulator(settings, panic_stop_event):
         panic(buzzer_callback,settings, reason, panic_stop_event)
-        
-        
+        if alarm.active == False:
+            send_alarm_mqtt("Inactive")
+          
     # Create a new thread and start it
     
     global panic_stop_event
@@ -112,10 +115,11 @@ def invoke_alarm(reason):
 
 def check_enter_house(time_now):
     time.sleep(10)
-    if alarm.active and last_tried_pin[0]!=alarm.pin:
-        invoke_alarm("WRONG PIN")
-    elif last_tried_pin[1]-time_now>timedelta(seconds=10) or time_now-last_tried_pin[1]>timedelta(seconds=0):
-        invoke_alarm("PIN NOT DETECTED")
+    if alarm.active:
+        if last_tried_pin[0]!=alarm.pin:
+            invoke_alarm("WRONG PIN")
+        elif last_tried_pin[1]-time_now>timedelta(seconds=10) or time_now-last_tried_pin[1]>timedelta(seconds=0):
+            invoke_alarm("PIN NOT DETECTED")
 
 def check_password(pin):
     print('check password: ', pin)
