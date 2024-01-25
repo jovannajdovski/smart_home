@@ -18,7 +18,7 @@
     let selectedPiIdx = 1;
 
     let data= [{}];
-
+   
     const fetchData = async () => {
         try {
         const response = await fetch('http://localhost:5000/get_all');
@@ -37,7 +37,7 @@
 
     onMount(() => {
         fetchData();
-        intervalId  = setInterval(fetchData, 5000);
+        intervalId  = setInterval(fetchData, 10000);
         return () => clearInterval(intervalId);
     });
 
@@ -47,9 +47,11 @@
         selectedPiIdx = idx;
     };
 
+    let rgbComp;
     let alarm="INACTIVE";
     $: {
         alarm = data[0].value?.toUpperCase() ?? "INACTIVE";
+        rgbComp = data.find(element => element.type === "RGB-LIGHT");
     }
 
     const turnAlarm = () => {
@@ -111,7 +113,7 @@
                             {:else if component.type === "GYRO"}        
                                 <Gyro sensor={component} />
                             {:else if component.type === "IR-RECEIVER"}
-                                <Infrared infrared={component} />
+                                <Infrared infrared={component} color={rgbComp.value} />
                             {:else if component.type === "LCD"}          
                                 <LCD display={component} />
                             {:else if component.type === "PIR"}
@@ -156,7 +158,7 @@
                         {:else if component.type === "GYRO"}        
                             <Gyro sensor={component} />
                         {:else if component.type === "IR-RECEIVER"}
-                            <Infrared infrared={component} />
+                            <Infrared infrared={component} color={rgbComp.value}/>
                         {:else if component.type === "LCD"}          
                             <LCD display={component} />
                         {:else if component.type === "MS"}
@@ -176,11 +178,11 @@
         {/if}
         <div class="grafana-container">
             {#if selectedPiIdx === 1}            
-                <iframe class="dashboard" src={dashboardUrl1} frameborder="0"></iframe>
+                <iframe title="dash1"class="dashboard" src={dashboardUrl1} frameborder="0"></iframe>
             {:else if selectedPiIdx === 2}          
-                <iframe class="dashboard2" src={dashboardUrl2} frameborder="0"></iframe>
+                <iframe title="dash2" class="dashboard2" src={dashboardUrl2} frameborder="0"></iframe>
             {:else}
-                <iframe class="dashboard" src={dashboardUrl3} frameborder="0"></iframe>
+                <iframe title="dash3" class="dashboard" src={dashboardUrl3} frameborder="0"></iframe>
             {/if}
         </div>
     </div>

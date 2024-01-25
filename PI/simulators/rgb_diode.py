@@ -30,25 +30,25 @@ def run_rgb_diode_simulator(settings, delay, callback, stop_event, rgb_power_on_
     power_on = False
     while not stop_event.is_set():
         if rgb_power_on_event.is_set() and not power_on:
-            callback("", settings, "RGB TURNED ON")
+            callback("red", settings, "RGB TURNED ON")
             power_on = True
         elif not rgb_power_on_event.is_set() and power_on:
-            callback("", settings, "RGB TURNED OFF")
+            callback("off", settings, "RGB TURNED OFF")
             power_on = False
 
         if red_event.is_set():
             if power_on:
-                callback(RED + "red" + RESET, settings)
+                callback("red", settings)
             red_event.clear()
         
         if green_event.is_set():
             if power_on:
-                callback(GREEN + "green" + RESET, settings)
+                callback("green", settings)
             green_event.clear()
 
         if blue_event.is_set():
             if power_on:
-                callback(BLUE + "blue" + RESET, settings)
+                callback("blue", settings)
             blue_event.clear()
         time.sleep(delay)
 

@@ -9,11 +9,11 @@
         "simulated": true
     },
     "PI2": {
-        "running": true,
+        "running": false,
         "simulated": true
     },
     "PI3": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "RDHT1": {

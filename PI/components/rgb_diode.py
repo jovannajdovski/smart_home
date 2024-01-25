@@ -9,7 +9,7 @@ from utils.counter import Counter
 
 batch = []
 publish_data_counter = Counter(0)
-publish_data_limit = 5
+publish_data_limit = 1
 publish_event=threading.Event()
 counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
@@ -19,11 +19,11 @@ totalPersons=None
 
 def rgb_diode_callback(color, settings, action = "Current color"):      
     t = time.localtime()
-    # safe_print("\n"+"="*20,
-    #             f"RGB DIODE ID: {settings['id']}",
-    #             f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-    #             f"RGB DIODE: {action} {color}"
-    #             )
+    safe_print("\n"+"="*20,
+                f"RGB DIODE ID: {settings['id']}",
+                f"Timestamp: {time.strftime('%H:%M:%S', t)}",
+                f"RGB DIODE: {action} - {color}"
+                )
     payload={
              'measurement': settings['type'],
              'simulated': settings['simulated'],

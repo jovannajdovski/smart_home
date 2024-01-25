@@ -54,28 +54,28 @@ def run_rgb_diode_loop(rgb_diode, settings, delay, callback, stop_event, rgb_pow
     while not stop_event.is_set():
         if rgb_power_on_event.is_set() and not power_on:
             rgb_diode.turn_red()
-            callback("", settings, "RGB TURNED ON")
+            callback("red", settings, "RGB TURNED ON")
             power_on = True
         elif not rgb_power_on_event.is_set() and power_on:
             rgb_diode.turn_off()
-            callback("", settings, "RGB TURNED OFF")
+            callback("off", settings, "RGB TURNED OFF")
             power_on = False
 
         if red_event.is_set():
             if power_on:
                 rgb_diode.turn_red()
-                callback(RED + "red" + RESET, settings)
+                callback("red", settings)
             red_event.clear()
         
         if green_event.is_set():
             if power_on:
                 rgb_diode.turn_green()
-                callback(GREEN + "green" + RESET, settings)
+                callback("green", settings)
             green_event.clear()
 
         if blue_event.is_set():
             if power_on:
                 rgb_diode.turn_blue()
-                callback(BLUE + "blue" + RESET, settings)
+                callback("blue", settings)
             blue_event.clear()
         time.sleep(delay)

@@ -108,6 +108,18 @@ def send_pin():
         publish.multiple([('pin', json.dumps(data), 0, False)], hostname="localhost", port=1883)
         return jsonify({'result': 'Success'}), 200 
     else:
+        return jsonify({'error': 'Invalid request'}), 400
+    
+@app.route('/send_rgb_command', methods=['POST'])
+def send_rgb_command():
+    data = request.get_json()
+    print(data)
+    command = data.get('command')
+
+    if command is not None:
+        publish.multiple([('rgb-command', json.dumps(data), 0, False)], hostname="localhost", port=1883)
+        return jsonify({'result': 'Success'}), 200 
+    else:
         return jsonify({'error': 'Invalid request'}), 400 
 
 def generate_query(measurement):

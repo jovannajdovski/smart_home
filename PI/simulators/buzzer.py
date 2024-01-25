@@ -8,7 +8,8 @@ def beep():
     except ImportError:
         import os
         def _beep():
-            os.system('beep')
+            pass
+            # os.system('beep')
     else:
         def _beep():
             winsound.Beep(1000, 1000)

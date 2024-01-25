@@ -12,7 +12,7 @@ from components.gyro import run_gyro
 from components.segment_display import run_4segment_display
 from components.lcd import run_lcd
 from components.led_diode import run_led_diode
-from components.ir_receiver import run_ir_receiver
+from components.ir_receiver import rgb_command, run_ir_receiver
 import time
 import json
 import paho.mqtt.client as mqtt
@@ -89,10 +89,10 @@ def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     blue_event = threading.Event()
 
     #run_pir(rpir4_settings, totalPersons, threads, stop_event)
-    run_dht(rdht4_settings, totalPersons, threads, stop_event) 
-    run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
+    #run_dht(rdht4_settings, totalPersons, threads, stop_event) 
+    #run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
     run_rgb_diode(brgb_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
-    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
+    #run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
     run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
 
 def subscribe_on_topics():
@@ -104,6 +104,7 @@ def subscribe_on_topics():
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("pin")
+    client.subscribe("rgb-command")
 
 
 def on_message(client, userdata, msg):
@@ -112,6 +113,8 @@ def on_message(client, userdata, msg):
     data = json.loads(msg.payload.decode('utf-8'))
     if msg.topic=="pin":
         check_password(data['pin'])
+    elif msg.topic=="rgb-command":
+        rgb_command(data['command'])
     else:
         pass
 
