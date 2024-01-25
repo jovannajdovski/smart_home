@@ -9,7 +9,7 @@ from utils.counter import Counter
 
 batch = []
 publish_data_counter = Counter(0)
-publish_data_limit = 5
+publish_data_limit = 1
 publish_event=threading.Event()
 counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
@@ -20,12 +20,12 @@ alarm_clock_event = None
 
 def segment_display_callback(digit1, digit2, digit3, digit4, settings, blink):      
     t = time.localtime()
-    # safe_print("\n"+"="*20,
-    #             f"4SEGMENT DISPLAY ID: {settings['id']}",
-    #             f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-    #             f"DISPLAY: {digit1}{digit2}:{digit3}{digit4}",
-    #             f"CLOCK ALARM: {str(blink)}"
-    #             )
+    safe_print("\n"+"="*20,
+                f"4SEGMENT DISPLAY ID: {settings['id']}",
+                f"Timestamp: {time.strftime('%H:%M:%S', t)}",
+                f"DISPLAY: {digit1}{digit2}:{digit3}{digit4}",
+                f"CLOCK ALARM: {str(blink)}"
+                )
     payload={
              'measurement': settings['type'],
              'simulated': settings['simulated'],

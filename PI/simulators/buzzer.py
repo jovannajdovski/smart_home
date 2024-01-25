@@ -8,7 +8,8 @@ def beep():
     except ImportError:
         import os
         def _beep():
-            os.system('beep')
+            pass
+            # os.system('beep')
     else:
         def _beep():
             winsound.Beep(1000, 1000)
@@ -23,7 +24,7 @@ def alarm():
     
 def panic(callback, settings, reason, panic_stop_event):
     callback("PANIC", settings, reason)
-    for _ in range(20):
+    while True:
         if panic_stop_event.is_set():
             break
         beep()

@@ -9,12 +9,44 @@
         pi: number;
     };
 
-    const turn = () => {
-        infrared.active = !infrared.active;
+    export let color: string;
+    console.log(color)
+
+    const sendRgbCommand = async (command:string, id:string, tmp: any) => {
+        try {
+        const response = await fetch('http://localhost:5000/send_rgb_command', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'command':command,'id':id, 'tmp':tmp}),
+        });
+        if (response.ok) {
+            console.log('send pin ok')
+        } else {
+            console.error('Failed to fetch data:', response.statusText);
+        }
+        } catch (error) {
+        console.error('Error:', error);
+        }
     };
 
-    const changeColor = (color: string) => {
-        infrared.color = color;
+    const turn = () => {
+        if (color === "off"){
+            color = "red"
+        } 
+        else {
+            color = "off";
+        }
+
+        sendRgbCommand("OK",infrared.id, new Date());
+    };
+
+    const changeColor = (newColor: string) => {
+        color = newColor;
+        if (color === "red") sendRgbCommand("1",infrared.id, new Date());
+        if (color === "green") sendRgbCommand("2",infrared.id, new Date());
+        if (color === "blue") sendRgbCommand("3",infrared.id, new Date());
     };
 </script>
 
@@ -23,15 +55,15 @@
     <p>Area <b>{infrared.area}</b></p>
     <button
         class={`${
-            infrared.active ? "bg-gray-400" : "bg-gray-600"
+            color !== "off" ? "bg-gray-400" : "bg-gray-600"
         } w-64 h-10 border-4 border-solid border-gray-500  rounded m-2`}
-        on:click={turn}>TURN {`${infrared.active ? "OFF" : "ON"}`}</button
+        on:click={turn}>TURN {`${color !== "off" ? "OFF" : "ON"}`}</button
     >
 
     <div class="color-picker">
         <button
             class={`${
-                infrared.active && infrared.color === "red"
+                color === "red"
                     ? "border-4 border-solid border-gray-500"
                     : null
             } w-20 h-10 bg-red-600 rounded m-2 cursor-pointer`}
@@ -39,7 +71,7 @@
         />
         <button
             class={`${
-                infrared.active && infrared.color === "green"
+                color === "green"
                     ? "border-4 border-solid border-gray-500"
                     : null
             } w-20 h-10 bg-green-600 rounded m-2 cursor-pointer`}
@@ -47,7 +79,7 @@
         />
         <button
             class={`${
-                infrared.active && infrared.color === "blue"
+                color === "blue"
                     ? "border-4 border-solid border-gray-500"
                     : null
             } w-20 h-10 bg-blue-600 rounded m-2 cursor-pointer`}

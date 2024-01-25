@@ -10,7 +10,7 @@ from utils.counter import Counter
 
 batch = []
 publish_data_counter = Counter(0)
-publish_data_limit = 5
+publish_data_limit = 1
 publish_event=threading.Event()
 counter_lock = threading.Lock()
 publisher_thread = threading.Thread(target=publish_message, args=(publish_event, batch, counter_lock, publish_data_counter ))
@@ -24,9 +24,8 @@ green_event = None
 blue_event = None
 power_on = False
 
-def ir_receiver_callback(command, settings):
+def rgb_command(command):
     global rgb_power_on_event, red_event, green_event, blue_event, power_on
-    t = time.localtime()
 
     if command == "OK":
         power_on = not power_on
@@ -44,6 +43,11 @@ def ir_receiver_callback(command, settings):
     if command == "3":
         blue_event.set()
 
+def ir_receiver_callback(command, settings):
+    global rgb_power_on_event, red_event, green_event, blue_event, power_on
+    t = time.localtime()
+
+    rgb_command(command)
 
     # safe_print("\n"+"="*20,
     #         f"IR RECEIVER ID: {settings['id']}",

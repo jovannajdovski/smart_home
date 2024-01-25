@@ -1,6 +1,13 @@
 <script lang="ts">
-    export let rgb: { id:string; type: string; measurement: string; area: string; value: string|undefined; time: string|undefined; pi:number};
-
+    export let rgb: {
+        id: string;
+        type: string;
+        measurement: string;
+        area: string;
+        value: string | undefined;
+        time: string | undefined;
+        pi: number;
+    };
 </script>
 
 <div class="card">
@@ -9,26 +16,10 @@
 
     <div class="color-picker">
         <div
-            class={`${
-                rgb.value === "off"
-                    ? "bg-gray-600"
-                    : null
-            } 
-            ${
-                rgb.value === "red"
-                    ? "bg-red-600"
-                    : null
-            }
-            ${
-                rgb.value === "green"
-                    ? "bg-green-600"
-                    : null
-            }
-            ${
-                rgb.value === "blue"
-                    ? "bg-blue-600"
-                    : null
-            }
+            class={`${rgb.value === "off" ? "bg-gray-600" : null} 
+            ${rgb.value === "red" ? "bg-red-600" : null}
+            ${rgb.value === "green" ? "bg-green-600" : null}
+            ${rgb.value === "blue" ? "bg-blue-600" : null}
             w-10 h-10 rounded m-3`}
         />
     </div>
@@ -49,10 +40,11 @@
         display: flex;
         flex-direction: row;
     }
-    h1, p{
+    h1,
+    p {
         padding: 5px;
     }
-    b{
+    b {
         font-size: 18px;
     }
 </style>
