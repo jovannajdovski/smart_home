@@ -21,11 +21,11 @@ class LedDiode(object):
 def run_led_diode_loop(led_diode, settings, delay, callback, stop_event):
     
     while not stop_event.is_set():
-        rnd = random.random()
-        if rnd < 0.2:
-            led_diode.turn_on()
-            callback("on", settings)
-        else:
-            led_diode.turn_off()
-            callback("off", settings)
+        # rnd = random.random()
+        # if rnd < 0.2:
+        #     led_diode.turn_on()
+        #     callback("on", settings)
+        # else:
+        #     led_diode.turn_off()
+        #     callback("off", settings)
         time.sleep(delay)

@@ -21,18 +21,22 @@ def alarm():
         beep()
         time.sleep(1)
     
-def panic():
-    for _ in range(10):
+    
+def panic(callback, settings, reason, panic_stop_event):
+    callback("PANIC", settings, reason)
+    while True:
+        if panic_stop_event.is_set():
+            break
         beep()
 
 def on_press(key, callback, settings):
     key = str(key).replace("'", "")
     if key == "a":
         alarm()
-        callback("ALARM", settings)
+        callback("ALARM", settings, "Alarm")
     elif key == "z":
         beep()
-        callback("BUZZ", settings)
+        callback("BUZZ", settings, "Buzz")
 
 def run_buzzer_simulator(settings, delay, callback, stop_event, alarm_clock_event):
     # listener = keyboard.Listener(on_press=lambda key: on_press(key, callback, settings))

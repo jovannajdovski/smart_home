@@ -5,11 +5,11 @@
     },
     "totalPersons":50,
     "PI1": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "PI2": {
-        "running": false,
+        "running": true,
         "simulated": true
     },
     "PI3": {

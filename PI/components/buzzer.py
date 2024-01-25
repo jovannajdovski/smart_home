@@ -1,7 +1,7 @@
 
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from utils.safe_print import safe_print
 from utils.mqtt import publish_message 
@@ -21,13 +21,17 @@ totalPersons=None
 alarm=None
 buzzer_actuator=None
 alarm_clock_event = None
+buzzer_settings=[]
+panic_stop_event=None
+last_tried_pin=["",0]
 
-def buzzer_callback(code, settings):    
+def buzzer_callback(code, settings, reason):    
     t = time.localtime()
     safe_print("\n"+"="*20,
                 f"BUZZER ID: {settings['id']}",
                 f"Timestamp: {time.strftime('%H:%M:%S', t)}",
-                f"BUZZER: {code} activated"
+                f"BUZZER: {code} activated",
+                f"REASON: {reason}"
                 )
     payload={
              'measurement': settings['type'],
@@ -46,9 +50,11 @@ def buzzer_callback(code, settings):
     
 
 
-def run_buzzer(settings, _totalPersons, _alarm, threads, stop_event, _alarm_clock_event=None):
+def run_buzzer(settings, _totalPersons, _alarm, threads, _panic_stop_event, stop_event,  _alarm_clock_event=None):
     global totalPersons
     totalPersons=_totalPersons
+    global panic_stop_event
+    panic_stop_event=_panic_stop_event
     global alarm
     if alarm is None:
         alarm=_alarm
@@ -57,7 +63,10 @@ def run_buzzer(settings, _totalPersons, _alarm, threads, stop_event, _alarm_cloc
     global alarm_clock_event
     alarm_clock_event = _alarm_clock_event
 
-    # threads.append(publisher_thread)
+    global buzzer_settings
+    buzzer_settings.append(settings)
+
+    threads.append(publisher_thread)
     if settings['simulated']:
         print(f"\nStarting {settings['id']} simulator\n")
         buzzer_thread = threading.Thread(target = run_buzzer_simulator, args=(settings, 0.1, buzzer_callback, stop_event, alarm_clock_event))
@@ -76,27 +85,52 @@ def run_buzzer(settings, _totalPersons, _alarm, threads, stop_event, _alarm_cloc
         threads.append(buzzer_thread)
         print(f"\n{settings['id']} loop started\n")
 
-def invoke_alarm():
-    def alarm_thread():
-        if buzzer_actuator is not None:
-            buzzer_actuator.panic(10, 0.5)
-        else:
-            panic()
+def invoke_alarm(reason):
+    def alarm_thread_actuator(settings):
+        buzzer_actuator.panic(10, 0.5, settings, buzzer_callback, reason)
+        
+    def alarm_thread_simulator(settings, panic_stop_event):
+        panic(buzzer_callback,settings, reason, panic_stop_event)
+        
+        
+    # Create a new thread and start it
+    
+    global panic_stop_event
+    panic_stop_event.clear()
+    if buzzer_actuator is not None:
+        for settings in buzzer_settings:
+            alarm_thread = threading.Thread(target=alarm_thread_actuator, args=(settings))
+            alarm_thread.start()
+        send_alarm_mqtt("PANIC")
+    else:
+        for settings in buzzer_settings:
+            alarm_thread = threading.Thread(target=alarm_thread_simulator, args=(settings, panic_stop_event))
+            alarm_thread.start()
         send_alarm_mqtt("PANIC")
 
-    # Create a new thread and start it
-    alarm_thread = threading.Thread(target=alarm_thread)
-    alarm_thread.start()
+
+
+def check_enter_house(time_now):
+    time.sleep(10)
+    if alarm.active and last_tried_pin[0]!=alarm.pin:
+        invoke_alarm("WRONG PIN")
+    elif last_tried_pin[1]-time_now>timedelta(seconds=10) or time_now-last_tried_pin[1]>timedelta(seconds=0):
+        invoke_alarm("PIN NOT DETECTED")
 
 def check_password(pin):
     print('check password: ', pin)
+    global last_tried_pin
+    last_tried_pin=[pin,datetime.now()]
     if alarm.active and pin==alarm.pin:
         alarm.active=False
+        panic_stop_event.set()
         print('active->inactive')
         send_alarm_mqtt("Inactive")
     elif alarm.active and pin!=alarm.pin:
-        invoke_alarm()
+        pass
+        # invoke_alarm("WRONG PIN")
     elif not alarm.active and pin==alarm.pin:
+        panic_stop_event.set()
         time.sleep(10)
         print('inactive->active')
         alarm.active=True

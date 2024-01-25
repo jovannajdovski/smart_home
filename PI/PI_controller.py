@@ -28,7 +28,7 @@ except:
 
 totalPersons=None
 
-def run_pi1(settings, totalPersons, alarm, threads, stop_event):
+def run_pi1(settings, totalPersons, alarm, threads, panic_stop_event, stop_event):
     rdht1_settings = settings['RDHT1']
     rdht2_settings = settings['RDHT2']
     dus1_settings = settings['DUS1']
@@ -39,19 +39,18 @@ def run_pi1(settings, totalPersons, alarm, threads, stop_event):
     ds1_settings = settings['DS1']
     dl_settings = settings['DL']
     dms_settings = settings['DMS']
-
     run_led_diode(dl_settings, totalPersons, threads, stop_event)
     run_dht(rdht1_settings, totalPersons, threads, stop_event)
     run_dht(rdht2_settings, totalPersons, threads, stop_event)
-    #run_uds(dus1_settings, totalPersons, threads, stop_event)
-    #run_pir(dpir1_settings, totalPersons, threads, stop_event)
-    #run_pir(rpir1_settings, totalPersons, threads, stop_event)
-    #run_pir(rpir2_settings, totalPersons, threads, stop_event)
-    run_buzzer(db_settings, totalPersons, alarm, threads, stop_event)
-    run_button(ds1_settings, totalPersons, threads, stop_event)
+    run_uds(dus1_settings, totalPersons, threads, stop_event)
+    run_pir(dpir1_settings, totalPersons, threads, stop_event)
+    run_pir(rpir1_settings, totalPersons, threads, stop_event)
+    run_pir(rpir2_settings, totalPersons, threads, stop_event)
+    run_buzzer(db_settings, totalPersons, alarm, threads, panic_stop_event, stop_event)
+    run_button(ds1_settings, totalPersons, threads, panic_stop_event, stop_event)
     run_membrane_switch(dms_settings, totalPersons, threads, stop_event)
 
-def run_pi2(settings, totalPersons, threads, stop_event):
+def run_pi2(settings, totalPersons, threads, panic_stop_event, stop_event):
     ds2_settings = settings['DS2']
     dus2_settings = settings['DUS2']
     dpir2_settings = settings['DPIR2']
@@ -62,7 +61,7 @@ def run_pi2(settings, totalPersons, threads, stop_event):
     rdht3_settings = settings['RDHT3']
 
     run_lcd(glcd_settings, totalPersons, threads, stop_event)
-    run_button(ds2_settings, totalPersons, threads, stop_event)
+    run_button(ds2_settings, totalPersons, threads, panic_stop_event, stop_event)
     run_uds(dus2_settings, totalPersons, threads, stop_event)
     run_pir(dpir2_settings, totalPersons, threads, stop_event)
     run_dht(gdht_settings, totalPersons, threads, stop_event)
@@ -70,7 +69,7 @@ def run_pi2(settings, totalPersons, threads, stop_event):
     run_pir(rpir3_settings, totalPersons, threads, stop_event)
     run_dht(rdht3_settings, totalPersons, threads, stop_event) 
 
-def run_pi3(settings, totalPersons, alarm, threads, stop_event):
+def run_pi3(settings, totalPersons, alarm, threads, panic_stop_event, stop_event):
 
     clock_alarm_settings = settings["clockAlarm"]
     _alarm_clock_event = threading.Event()
@@ -88,11 +87,11 @@ def run_pi3(settings, totalPersons, alarm, threads, stop_event):
     green_event = threading.Event()
     blue_event = threading.Event()
 
-    #run_pir(rpir4_settings, totalPersons, threads, stop_event)
-    #run_dht(rdht4_settings, totalPersons, threads, stop_event) 
+    run_pir(rpir4_settings, totalPersons, threads, stop_event)
+    run_dht(rdht4_settings, totalPersons, threads, stop_event) 
     run_4segment_display(b4sd_settings, totalPersons, threads, stop_event, _alarm_clock_event)
     run_rgb_diode(brgb_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
-    run_buzzer(bb_settings, totalPersons, alarm, threads, stop_event, _alarm_clock_event)
+    run_buzzer(bb_settings, totalPersons, alarm, threads, panic_stop_event, stop_event, _alarm_clock_event)
     run_ir_receiver(ir_receiver_settings, totalPersons, threads, stop_event, rgb_power_on_event, red_event, green_event, blue_event)
 
 def subscribe_on_topics():
@@ -135,12 +134,13 @@ if __name__ == "__main__":
     subscribe_on_topics()
     try:
         alarm = Alarm(pin="0123", active=True)
+        panic_stop_event=threading.Event()
         if settings["PI1"]["running"]:
-            run_pi1(settings, totalPersons, alarm, stop_threads, stop_event)
+            run_pi1(settings, totalPersons, alarm, stop_threads, panic_stop_event, stop_event)
         if settings["PI2"]["running"]:
-            run_pi2(settings, totalPersons, stop_threads, stop_event)
+            run_pi2(settings, totalPersons, stop_threads, panic_stop_event, stop_event)
         if settings["PI3"]["running"]:
-            run_pi3(settings, totalPersons, alarm, stop_threads, stop_event)
+            run_pi3(settings, totalPersons, alarm, stop_threads, panic_stop_event, stop_event)
         
         
         while True:

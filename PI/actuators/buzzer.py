@@ -31,7 +31,8 @@ class Buzzer(object):
             self.buzz(buzz_duration)
             time.sleep(buzz_duration)
     
-    def panic(self, buzz_duration, panic_duration):
+    def panic(self, buzz_duration, panic_duration, settings, callback, reason):
+        callback("ALARM", settings, reason)
         for _ in range(panic_duration//(buzz_duration*2)):
             self.buzz(buzz_duration)
 
@@ -76,13 +77,13 @@ def run_buzzer_loop(buzzer, settings, delay, duration, callback, stop_event, ala
                 song_thread = threading.Thread(target = play_song, args=(buzzer, song, song_stop_event))
                 song_thread.start()
 
-                callback("CLOCK ALARM STARTED", settings)
+                callback("CLOCK ALARM STARTED", settings, "Na kraj sela zuta kuca")
             elif not alarm_clock_event.is_set() and clock_alarm_started:
                 clock_alarm_started = False
                 # buzzer.turn_off()
                 song_stop_event.set()
 
-                callback("CLOCK ALARM TURNED OFF", settings)
+                callback("CLOCK ALARM TURNED OFF", settings, "Gasi budilnik")
         if stop_event.is_set():
             buzzer.turn_off()
             GPIO.cleanup()

@@ -52,7 +52,7 @@ def run_4segment_display(settings, _totalPersons, threads, stop_event, _alarm_cl
     global alarm_clock_event
     alarm_clock_event = _alarm_clock_event
 
-    # threads.append(publisher_thread)
+    threads.append(publisher_thread)
     if settings['simulated']:
         from simulators.segment_display import run_4segment_simulator
         print(f"\nStarting {settings['id']} simulator\n")
