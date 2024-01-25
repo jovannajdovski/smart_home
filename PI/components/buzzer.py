@@ -111,13 +111,10 @@ def invoke_alarm(reason):
 
 
 def check_enter_house(time_now):
-    print('check')
     time.sleep(10)
     if alarm.active and last_tried_pin[0]!=alarm.pin:
-        print('los pin')
         invoke_alarm("WRONG PIN")
     elif last_tried_pin[1]-time_now>timedelta(seconds=10) or time_now-last_tried_pin[1]>timedelta(seconds=0):
-        print('kasno marko na kosovo stize')
         invoke_alarm("PIN NOT DETECTED")
 
 def check_password(pin):
@@ -127,7 +124,6 @@ def check_password(pin):
     if alarm.active and pin==alarm.pin:
         alarm.active=False
         panic_stop_event.set()
-        print('SET')
         print('active->inactive')
         send_alarm_mqtt("Inactive")
     elif alarm.active and pin!=alarm.pin:
@@ -135,7 +131,6 @@ def check_password(pin):
         # invoke_alarm("WRONG PIN")
     elif not alarm.active and pin==alarm.pin:
         panic_stop_event.set()
-        print('SET')
         time.sleep(10)
         print('inactive->active')
         alarm.active=True

@@ -39,7 +39,6 @@ def run_pi1(settings, totalPersons, alarm, threads, panic_stop_event, stop_event
     ds1_settings = settings['DS1']
     dl_settings = settings['DL']
     dms_settings = settings['DMS']
-    print(panic_stop_event)
     run_led_diode(dl_settings, totalPersons, threads, stop_event)
     run_dht(rdht1_settings, totalPersons, threads, stop_event)
     run_dht(rdht2_settings, totalPersons, threads, stop_event)

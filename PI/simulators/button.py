@@ -11,8 +11,6 @@ def generate_values(probability=0.2):
 
 def generate_values_pressing_five_seconds(probability=0.2):
     for i in range(100):
-        if (i==50):
-            print("Pedeset")
         if(i==40):
             print("Cetrdeset")
             yield True
