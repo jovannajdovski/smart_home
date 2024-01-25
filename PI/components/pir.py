@@ -80,7 +80,7 @@ def count_persons(settings):
                         if totalPersons['value']>=1:
                             totalPersons['value']-=1
                         else:
-                            invoke_alarm()
+                            invoke_alarm("HOUSE LEAVING DESPITE EMPTY HOUSE dpir1")
     if settings['id']=='DPIR2':
             if 'DUS2' in last_distances and last_distances['DUS2'][0]!=None:
                 if last_distances['DUS2'][0]>last_distances['DUS2'][1]:
@@ -91,12 +91,12 @@ def count_persons(settings):
                         if totalPersons['value']>=1:
                             totalPersons['value']-=1
                         else:
-                            invoke_alarm()
+                            invoke_alarm("HOUSE LEAVING DESPITE EMPTY HOUSE dpir2")
 
 def check_motion(settings):
     with totalPersons['lock']:
         if totalPersons['value']==0 and settings['id'] in ['RPIR1','RPIR2','RPIR3','RPIR4']:
-            invoke_alarm()
+            invoke_alarm("DETECTED MOVEMENTS DESPITE EMPTY HOUSE")
 
 def check_motion_for_light(settings):
     if settings['id'] == 'DPIR1':

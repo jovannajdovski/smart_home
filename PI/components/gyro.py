@@ -34,7 +34,7 @@ def gyro_callback(accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, settings):
         last_values[settings['id']][0]=last_values[settings['id']][1]
         last_values[settings['id']][1]=[(accel_x, accel_y, accel_z),(gyro_x, gyro_y, gyro_z)]
         if abs(calculate_magnitude(last_values[settings['id']][0][0])-calculate_magnitude(last_values[settings['id']][1][0]))>5 or abs(calculate_magnitude(last_values[settings['id']][0][1])-calculate_magnitude(last_values[settings['id']][1][1]))>5:
-            invoke_alarm()
+            invoke_alarm("GYRO MOVES")
 
     else:
         last_values[settings['id']]=[None, [(accel_x, accel_y, accel_z),(gyro_x, gyro_y, gyro_z)]]

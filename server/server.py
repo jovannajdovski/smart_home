@@ -16,6 +16,7 @@ CORS(app)
 
 # InfluxDB Configuration
 token = "qHBkZB-YWpO0OqRrPd9VMDBv-EaTMZBGahrrkxVVB6OjCa4k3cztG5snU5AiWUBucjie1KKFsMCw3yqtVckRvg=="
+# token="DO-FFdev8G24pNFMFT7QDv4XYU3iijl__DnNmqaG6H7nCqom_CbxIRopPfcHzmKzLU2an-dyMvI9CZPuuwbBYg=="
 org = "FTN"
 url = "http://localhost:8087"
 bucket = "iot_db"
